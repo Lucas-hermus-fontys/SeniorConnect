@@ -1,6 +1,5 @@
-
 /.vs
 /bin
 /obj
 appsettings.json
-appsettings.Developmnet.json
+appsettings.Development.json
