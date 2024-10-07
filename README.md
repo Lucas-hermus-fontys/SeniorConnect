@@ -1,1 +1,1 @@
-# senior-connect
+# SeniorConnect
