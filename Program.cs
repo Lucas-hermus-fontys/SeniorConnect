@@ -1,32 +1,36 @@
+using SeniorConnect.DataAccess;
 using SeniorConnect.Util;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-// Run as console command if specified
-if (args.Length > 0)
-{
-    Command.runAsConsoleCommandIfSpecified(args);
-    return;
-}
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddSingleton(new Database(connectionString));
 
-// Configure the HTTP request pipeline.
+WebApplication app = builder.Build();
+
+ServiceLocator.SetLocatorProvider(app.Services);
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
+if (args.Length > 0)
+{
+    CommandUtil commandUtil = new CommandUtil();
+    commandUtil.RunAsCommand(args);
+    return;
+}
 
+app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
