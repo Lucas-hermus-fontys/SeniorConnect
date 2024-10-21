@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <input type="button" onclick="fetchTestJson()" value="Click to test the database connection"/>
+    <div id="apiResponse" style="margin-top: 20px; font-size: 1.5em;"></div>
+
+</div>
+
+<script>
+
+    async function fetchTestJson() {
+        try {
+            const response = await fetch('/test'); 
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            const data = await response.json(); 
+
+            document.getElementById('apiResponse').innerText = JSON.stringify(data);
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            document.getElementById('apiResponse').innerText = 'Error fetching data';
+        }
+    }
+
+</script>

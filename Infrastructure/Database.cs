@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using MySql.Data.MySqlClient;
 
-namespace SeniorConnect.DataAccess
+namespace SeniorConnect.Infrastructure
 
 {
     public class Database

@@ -1,6 +1,6 @@
-using SeniorConnect.Util;
+using SeniorConnect.Domain.Util;
 
-namespace SeniorConnect.DataAccess;
+namespace SeniorConnect.Infrastructure;
 
 public class Migration
 {
@@ -13,7 +13,7 @@ public class Migration
     
     public void MigrateDatabase()
     {
-        string query = File.ReadAllText("DataAccess/Migrations/14-10-2024-15.51.sql");
+        string query = File.ReadAllText("Infrastructure/Migrations/21-10-2024-11-14.sql");
         Console.WriteLine("Running migrations!");
         _databaseUtil.ExecuteQuery(query);
         Console.ForegroundColor = ConsoleColor.Green;

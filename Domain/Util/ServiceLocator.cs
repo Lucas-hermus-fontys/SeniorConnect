@@ -1,4 +1,4 @@
-namespace SeniorConnect.Util
+namespace SeniorConnect.Domain.Util
 {
     public static class ServiceLocator
     {

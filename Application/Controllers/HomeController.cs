@@ -1,12 +1,14 @@
-using Microsoft.AspNetCore.Mvc;
-using SeniorConnect.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using SeniorConnect.Domain.Commands;
+using SeniorConnect.Domain.Models;
 
-namespace SeniorConnect.Controllers
+namespace SeniorConnect.Application.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly MigrationCommand _migrationCommand = new();
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -16,6 +18,14 @@ namespace SeniorConnect.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet("test")] 
+        public IActionResult GetTestJson()
+        {
+            _migrationCommand.MigrateDatabase();
+            var response = new { test = "The database works!!" }; 
+            return Json(response);
         }
 
         public IActionResult Privacy()

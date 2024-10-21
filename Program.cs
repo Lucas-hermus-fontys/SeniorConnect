@@ -1,7 +1,14 @@
-using SeniorConnect.DataAccess;
-using SeniorConnect.Util;
+using SeniorConnect.Infrastructure;
+using SeniorConnect.Domain.Util;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews()
+    .AddRazorOptions(options =>
+    {
+        options.ViewLocationFormats.Insert(0, "/Presentation/Views/{1}/{0}.cshtml"); // Views per Controller
+        options.ViewLocationFormats.Insert(1, "/Presentation/Views/Shared/{0}.cshtml"); // Shared Views
+    });
 
 builder.Services.AddControllersWithViews();
 

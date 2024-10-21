@@ -1,6 +1,6 @@
-using SeniorConnect.Commands;
+using SeniorConnect.Domain.Commands;
 
-namespace SeniorConnect.Util
+namespace SeniorConnect.Domain.Util
 {
     public class CommandUtil
     {

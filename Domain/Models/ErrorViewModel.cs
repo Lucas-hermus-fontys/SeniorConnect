@@ -1,4 +1,4 @@
-namespace SeniorConnect.Models
+namespace SeniorConnect.Domain.Models
 {
     public class ErrorViewModel
     {
