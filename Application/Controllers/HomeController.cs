@@ -23,7 +23,7 @@ namespace SeniorConnect.Application.Controllers
         [HttpGet("test")] 
         public IActionResult GetTestJson()
         {
-            _migrationCommand.MigrateDatabase();
+            _migrationCommand.MigrateDatabase([]);
             var response = new { test = "The database works!!" }; 
             return Json(response);
         }

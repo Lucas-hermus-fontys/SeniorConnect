@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Folder Include="Application\" />
+    <Folder Include="Domain\Interfaces\" />
     <Folder Include="Domain\Service\" />
     <Folder Include="Infrastructure\Repository\" />
     <Folder Include="Presentation\" />

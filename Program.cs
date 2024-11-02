@@ -6,9 +6,11 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
-        options.ViewLocationFormats.Insert(0, "/Presentation/Views/{1}/{0}.cshtml"); // Views per Controller
-        options.ViewLocationFormats.Insert(1, "/Presentation/Views/Shared/{0}.cshtml"); // Shared Views
+        options.ViewLocationFormats.Insert(0, "/Presentation/Views/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Insert(1, "/Presentation/Views/Shared/{0}.cshtml");
     });
+
+builder.Environment.WebRootPath = Path.Combine(builder.Environment.ContentRootPath, "Presentation", "wwwroot");
 
 builder.Services.AddControllersWithViews();
 

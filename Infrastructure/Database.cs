@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using MySql.Data.MySqlClient;
+using SeniorConnect.Domain.Util;
 
 namespace SeniorConnect.Infrastructure
 
@@ -13,17 +14,29 @@ namespace SeniorConnect.Infrastructure
             _connectionString = connectionString;
         }
 
-        public DataTable ExecuteQuery(string query, Dictionary<string, object> parameters = null)
+        public DataTable ExecuteQuery(string query, params object[] parameters)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                using (MySqlCommand command = new MySqlCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand())
                 {
-                    if (parameters != null)
+                    command.Connection = connection;
+
+                    for (int i = 0; i < parameters.Length; i++)
                     {
-                        foreach (KeyValuePair<String, object> param in parameters)
+                        int index = query.IndexOf('?');
+                        if (index < 0) break;
+                        
+                        query = query.Remove(index, 1).Insert(index, $"@param{i}");
+                    }
+
+                    command.CommandText = query;
+                    
+                    if (parameters.Length > 0)
+                    {
+                        for (int i = 0; i < parameters.Length; i++)
                         {
-                            command.Parameters.AddWithValue(param.Key, param.Value);
+                            command.Parameters.AddWithValue($"@param{i}", parameters[i]);
                         }
                     }
 
@@ -36,7 +49,6 @@ namespace SeniorConnect.Infrastructure
                 }
             }
         }
-
         public int ExecuteNonQuery(string query, Dictionary<string, object> parameters = null)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
