@@ -1,4 +1,6 @@
-namespace Domain.Util
+using System;
+
+namespace Infrastructure.Util
 {
     public static class ServiceLocator
     {

@@ -1,7 +1,7 @@
-using SeniorConnect.Domain.Util;
-using SeniorConnect.Infrastructure;
+using Infrastructure.Database;
+using Server.Domain.Util;
 
-namespace SeniorConnect.Domain.Commands
+namespace Domain.Commands
 {
     public class MigrationCommand
     {

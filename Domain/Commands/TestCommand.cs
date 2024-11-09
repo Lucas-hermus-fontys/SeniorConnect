@@ -1,6 +1,6 @@
-using SeniorConnect.Infrastructure;
+using Infrastructure.Database;
 
-namespace SeniorConnect.Domain.Commands;
+namespace Domain.Commands;
 
 public class TestCommand
 {

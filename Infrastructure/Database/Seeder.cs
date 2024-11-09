@@ -1,6 +1,6 @@
-using SeniorConnect.Domain.Util;
+using Infrastructure.Util;
 
-namespace SeniorConnect.Infrastructure
+namespace Infrastructure.Database
 {
     public class Seeder
     {

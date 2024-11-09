@@ -1,4 +1,4 @@
-namespace Server.Domain.Models
+namespace Web.Models
 {
     public class ErrorViewModel
     {

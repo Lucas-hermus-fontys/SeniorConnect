@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace SeniorConnect.Domain.Util;
+namespace Server.Domain.Util;
 
 public class LoggingUtil
 {

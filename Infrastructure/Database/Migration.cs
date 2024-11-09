@@ -1,6 +1,7 @@
-using SeniorConnect.Domain.Util;
+using System.IO;
+using Infrastructure.Util;
 
-namespace SeniorConnect.Infrastructure;
+namespace Infrastructure.Database;
 
 public class Migration
 {
@@ -13,7 +14,7 @@ public class Migration
     
     public void MigrateDatabase()
     {
-        string query = File.ReadAllText("Infrastructure/Migrations/21-10-2024-11-14.sql");
+        string query = File.ReadAllText("../Infrastructure/Database/Migrations/21-10-2024-11-14.sql");
         _databaseUtil.ExecuteQuery(query);
     }
 }

@@ -6,3 +6,11 @@ appsettings.Development.json
 /.history
 /.idea
 *.sln.dotsettings.user
+/Domain/bin
+/Domain/obj
+/Infrastructure/bin
+/Infrastructure/obj
+/SeniorConnect/bin
+/SeniorConnect/obj
+/Web/bin
+/Web/obj

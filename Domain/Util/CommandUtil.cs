@@ -1,6 +1,7 @@
-using SeniorConnect.Domain.Commands;
+using Domain.Commands;
+using Server.Domain.Util;
 
-namespace SeniorConnect.Domain.Util
+namespace Domain.Util
 {
     public class CommandUtil
     {
