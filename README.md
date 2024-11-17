@@ -1,4 +1,4 @@
-~~# SeniorConnect
+# SeniorConnect
 
 ## About
 
