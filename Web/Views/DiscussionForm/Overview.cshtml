@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .post-card {
+            margin-bottom: 20px;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .post-header img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .post-body {
+            margin-bottom: 10px;
+        }
+        .post-footer {
+            display: flex;
+            align-items: center;
+        }
+        .post-footer .btn {
+            margin-right: 10px;
+        }
+        .comment-section {
+            margin-top: 20px;
+        }
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .comment {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .comment img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .comment-body {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 10px;
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search for topics and discussions">
+    </div>
+
+    <!-- First Post -->
+    <div class="card post-card">
+        <div class="card-body">
+            <div class="post-header">
+                <img src="https://via.placeholder.com/40" alt="Keerthi's profile picture">
+                <div>
+                    <strong>Keerthi</strong>
+                    <small class="text-muted">4 days ago</small>
+                </div>
+            </div>
+            <div class="post-body">
+                Lorem ipsum dolor sit
+            </div>
+            <div class="post-footer">
+                <button class="btn btn-outline-primary btn-sm">23</button>
+                <button class="btn btn-outline-secondary btn-sm">0</button>
+                <button class="btn btn-outline-secondary btn-sm">...</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Post -->
+    <div class="card post-card">
+        <div class="card-body">
+            <div class="post-header">
+                <img src="https://via.placeholder.com/40" alt="Pascal's profile picture">
+                <div>
+                    <strong>Pascal</strong>
+                    <small class="text-muted">5 days ago</small>
+                </div>
+            </div>
+            <div class="post-body">
+                quisquam magnam ad quia omnis et enim offic
+            </div>
+            <div class="post-footer">
+                <button class="btn btn-outline-primary btn-sm">48</button>
+                <button class="btn btn-outline-secondary btn-sm">21</button>
+                <button class="btn btn-outline-secondary btn-sm">...</button>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comment-section">
+                <div class="comment-header">
+                    <strong>21 Comments</strong>
+                    <div>
+                        <button class="btn btn-link p-0">Top comments</button>
+                        <button class="btn btn-link p-0">Newest first</button>
+                    </div>
+                </div>
+                <!-- Comment 1 -->
+                <div class="comment">
+                    <img src="https://via.placeholder.com/40" alt="Thomas L.'s profile picture">
+                    <div class="comment-body">
+                        <div>
+                            <strong>Thomas L.</strong> <span class="badge badge-success">Best Answer</span>
+                            <small class="text-muted">2d</small>
+                        </div>
+                        Ut nihil magni id nulla officiis qui similique quasi et culpa corporis aut eveniet iste. Sed fugiat nostrum est molesti
+                        <div class="mt-2">
+                            <button class="btn btn-outline-primary btn-sm">12</button>
+                            <button class="btn btn-outline-secondary btn-sm">4</button>
+                            <button class="btn btn-outline-secondary btn-sm">Reply</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment 2 -->
+                <div class="comment">
+                    <img src="https://via.placeholder.com/40" alt="Pascal's profile picture">
+                    <div class="comment-body">
+                        <div>
+                            <strong>Pascal</strong> <small class="text-muted">4d</small>
+                        </div>
+                        Ut nihil magni id nulla officiis qui similique quasi et culpa corporis aut eveniet iste. Sed fugiat nostrum est molesti
+                        <div class="mt-2">
+                            <button class="btn btn-outline-primary btn-sm">43</button>
+                            <button class="btn btn-outline-secondary btn-sm">12</button>
+                            <button class="btn btn-outline-secondary btn-sm">Reply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
