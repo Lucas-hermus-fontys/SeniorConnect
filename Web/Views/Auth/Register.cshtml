@@ -42,19 +42,37 @@ Layout = null;
 <body>
 <div class="login-container">
     <div class="login-header">
-        <h2>SeniorConnect</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, hic.</p>
+        <h2>Registreren Bij SeniorConnect</h2>
+        <p>Wordt lid van SeniorConnect</p>
     </div>
     <form method="post" action="/auth/register">
         <div class="form-group">
-            <label for="email">Email address</label>
+            <label for="email">e-mailadres*</label>
             <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email" required>
         </div>
         <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password">Wachtwoord*</label>
             <input type="password" class="form-control" id="password" name="Password" placeholder="Password" required>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        @if (!ViewData.ModelState.IsValid)
+        {
+        <div class="alert alert-danger">
+            @Html.ValidationSummary(false)
+        </div>
+        }
+        else if (TempData["SuccessMessage"] != null)
+        {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+
+        <script type="text/javascript">
+            setTimeout(function() {
+                window.location.href = '@Url.Action("Login", "Auth")';
+            }, 1000);
+        </script>
+        }
+        <button type="submit" class="btn btn-primary btn-block">Registreren</button>
     </form>
 </div>
 

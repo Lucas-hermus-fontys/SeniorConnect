@@ -42,10 +42,12 @@
 <body>
 <div class="login-container">
     <div class="login-header">
-        <h2>SeniorConnect</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, hic.</p>
+        <h2>SeniorConnect groep chats & discussieformulieren</h2>
+        <p>Log in om uw gesprekken te beheren</p>
     </div>
     <form method="post" action="/auth/login">
+        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+        <input type="hidden" name="returnUrl" value="@Context.Request.Query["ReturnUrl"]"/>
         <div class="form-group">
             <label for="email">Email address</label>
             <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email" required>
@@ -62,7 +64,7 @@
         }
         <button type="submit" class="btn btn-primary btn-block">Login</button>
         <div class="text-center mt-3">
-            <a href="#">Forgot password?</a>
+            <a asp-controller="Auth" asp-action="Register">Register</a>
         </div>
     </form>
 </div>

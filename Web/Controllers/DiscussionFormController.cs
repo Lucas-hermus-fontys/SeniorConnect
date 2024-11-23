@@ -6,7 +6,7 @@ namespace Web.Controllers
 {
     public class DiscussionFormController : Controller
     {
-        [Authorize]
+        // [Authorize]
         [HttpGet]
         public IActionResult Overview()
         {

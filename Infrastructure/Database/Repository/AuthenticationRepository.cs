@@ -1,4 +1,3 @@
-using Infrastructure.Database.Models;
 using Infrastructure.Util;
 
 namespace Infrastructure.Database.Repository;

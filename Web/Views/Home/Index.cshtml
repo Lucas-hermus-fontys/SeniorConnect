@@ -1,8 +1,124 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>SeniorConnect</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+        body {
+            /*background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926');*/
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Arial', sans-serif;
+            color: #333333;
+        }
+        .overlay {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 10px;
+        }
+        .dashboard-container {
+            padding: 2rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+        }
+        .header p {
+            font-size: 1.25rem;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card-img-top {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .card-title {
+            font-size: 1.5rem;
+        }
+        .card-text {
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container dashboard-container">
+        <div class="header">
+            <h1>Welkom bij SeniorConnect!</h1>
+            <p>Verbind met anderen, neem deel aan activiteiten, en vind steun in onze gemeenschap.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Activiteiten">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Activiteiten</h5>
+                        <p class="card-text">Doe mee aan leuke en boeiende activiteiten met andere leden.</p>
+                        <a href="http://localhost:8080/" class="btn btn-primary">Ga naar Activiteiten</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Groepsgesprekken">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Groepsgesprekken & Formulieren</h5>
+                        <p class="card-text">Verbind en chat met anderen in onze gemeenschap.</p>
+                        <a asp-controller="Auth" asp-action="Login" class="btn btn-primary">Start een gesprek</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Mentor Programma">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Mentor Programma</h5>
+                        <p class="card-text">Krijg begeleiding en steun van ervaren mentoren.</p>
+                        <a href="#" class="btn btn-primary">Vind een Mentor</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Vrijwilligerswerk">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Vrijwilligerswerk</h5>
+                        <p class="card-text">Geef terug aan de gemeenschap door vrijwilligerswerk.</p>
+                        <a href="#" class="btn btn-primary">Ontdek vrijwilligerswerk</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
