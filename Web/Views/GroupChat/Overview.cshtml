@@ -1,0 +1,217 @@
+@{
+Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .form-control {
+            width: 250px;
+        }
+        .conversations {
+            height: 80vh;
+            overflow-y: auto;
+            border-right: 1px solid #e9ecef;
+        }
+        .conversation-item {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+        }
+        .conversation-item img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .conversation-item .name {
+            font-weight: bold;
+        }
+        .conversation-item .time {
+            font-size: 0.8em;
+            color: #6c757d;
+            margin-left: auto;
+        }
+        .chat-area {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .chat-messages {
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .chat-message {
+            margin-bottom: 20px;
+        }
+        .chat-message img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .chat-message .message {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 75%;
+        }
+        .chat-message .time {
+            font-size: 0.8em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .chat-message {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin-left: 10px;
+        }
+        
+        .chat-input {
+            padding: 10px 20px;
+            border-top: 1px solid #e9ecef;
+            background-color: #ffffff;
+        }
+        .chat-input input {
+            width: 100%;
+            border: none;
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="container-fluid">
+        <input type="text" class="form-control" placeholder="Search">
+        <div class="ml-auto d-flex align-items-center">
+            <i class="ml-3 far fa-bell"></i>
+            <i class="ml-3 far fa-envelope"></i>
+            <i class="ml-3 far fa-user"></i>
+            <span class="ml-3">James Doe</span>
+            <img src="https://via.placeholder.com/40" alt="James Doe's profile picture" class="ml-2">
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Conversations List -->
+        <div class="col-md-4 conversations">
+            <div class="conversation-item">
+                <img src="https://via.placeholder.com/40" alt="Alan Husk's profile picture">
+                <div>
+                    <div class="name">Alan Husk</div>
+                    <div class="title">CEO</div>
+                    <div class="message">Agreed</div>
+                </div>
+                <div class="time">30 minutes ago</div>
+            </div>
+            <div class="conversation-item">
+                <img src="https://via.placeholder.com/40" alt="Betti Wood's profile picture profile-pic">
+                <div>
+                    <div class="name">Betti Wood</div>
+                    <div class="title">Head of Client Success</div>
+                    <div class="message">Hi Betti, the document has been e-signed.</div>
+                </div>
+                <div class="time">about 1 hour ago</div>
+            </div>
+            <div class="conversation-item">
+                <img src="https://via.placeholder.com/40" alt="Jenny Hart's profile picture">
+                <div>
+                    <div class="name">Jenny Hart</div>
+                    <div class="message">Hi Jenny, could we have that image please?</div>
+                </div>
+                <div class="time">about 18 hours ago</div>
+            </div>
+            <div class="conversation-item">
+                <img src="https://via.placeholder.com/40" alt="Simon Pegi's profile picture">
+                <div>
+                    <div class="name">Simon Pegi</div>
+                    <div class="title">UX/UI Designer</div>
+                    <div class="message">James, how's project Enigma going?</div>
+                </div>
+                <div class="time">about 21 hours ago</div>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="col-md-8 chat-area">
+            <div class="chat-messages">
+                <div class="chat-message d-flex">
+                    <img src="https://via.placeholder.com/40" alt="Betti Wood's profile picture profile-pic">
+                    <div>
+                        <div class="message">
+                            Hi Betti, would you be available for a quick catch up at 3?
+                        </div>
+                        <div class="time">09:33</div>
+                    </div>
+                </div>
+                <div class="chat-message d-flex">
+                    <img src="https://via.placeholder.com/40" alt="Betti Wood's profile picture profile-pic">
+                    <div>
+                        <div class="message">
+                            Morning, James. Sure!
+                        </div>
+                        <div class="time">09:58</div>
+                    </div>
+                </div>
+                <div class="chat-message d-flex">
+                    <img src="https://via.placeholder.com/40" alt="Betti Wood's profile picture profile-pic">
+                    <div>
+                        <div class="message">
+                            Would you want to go over the project notes?
+                        </div>
+                        <div class="time">09:58</div>
+                    </div>
+                </div>
+
+                <div class="chat-message d-flex flex-row-reverse">
+                    <img src="https://via.placeholder.com/40" class="test2" alt="James Doe's profile picture profile-pic">
+                    <div>
+                        <div class="message">
+                            Yes, it would be great!
+                        </div>
+                        <div class="time">10:54</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Start typing to reply...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,6 +1,8 @@
 using System;
 using System.Data;
+using Infrastructure.Exception;
 using Infrastructure.Model;
+using Infrastructure.Transformer;
 using Infrastructure.Util;
 
 namespace Infrastructure.Database.Repository;
@@ -26,14 +28,14 @@ public class UserRepository
         );
     }
 
-    public DataRow GetByEmail(string email)
+    public User GetByEmail(string email)
     {
         DataTable result = _databaseUtil.ExecuteQuery("Select * from user where email = ?;", email);
         if (result.Rows.Count == 0)
         {
             return null;
         }
-
-        return result.Rows[0];
+        
+        return UserTransformer.DataRowToUser(result.Rows[0]);
     }
 }

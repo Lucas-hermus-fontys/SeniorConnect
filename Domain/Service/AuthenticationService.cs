@@ -1,12 +1,7 @@
-using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Domain.Util;
 using Infrastructure.Database.Repository;
+using Infrastructure.Exception;
 using Infrastructure.Model;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Domain.Service;
 
@@ -16,6 +11,8 @@ public class AuthenticationService
 
     public void RegisterNewUser(string email, string password)
     {
+        if (_userRepository.GetByEmail(email) != null) { throw new EmailAlreadyExistsException(); }
+
         String salt = TokenProviderUtil.GenerateSalt();
         _userRepository.CreateNewUser(new User
         {
@@ -28,8 +25,8 @@ public class AuthenticationService
 
     public bool LoginCredentialsAreValid(String email, String password)
     {
-         DataRow user = _userRepository.GetByEmail(email);
-         if (user == null) return false;
-         return (string) user["password"] == TokenProviderUtil.GetSha256Hash(password + user["salt"]);
+        User user = _userRepository.GetByEmail(email);
+        if (user == null) return false;
+        return user.Password == TokenProviderUtil.GetSha256Hash(password + user.Salt);
     }
 }

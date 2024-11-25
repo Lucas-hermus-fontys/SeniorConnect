@@ -4,7 +4,7 @@ using Web.Models;
 
 namespace Web.Controllers
 {
-    public class DiscussionFormController : Controller
+    public class GroupChatController : Controller
     {
         [Authorize]
         [HttpGet]

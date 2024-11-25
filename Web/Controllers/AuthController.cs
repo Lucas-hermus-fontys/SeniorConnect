@@ -1,15 +1,21 @@
 using System.Data;
+using System.Security.Claims;
 using Domain.Service;
 using Infrastructure.Database.Repository;
+using Infrastructure.Exception;
+using Infrastructure.Model;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
+using AuthenticationService = Domain.Service.AuthenticationService;
 
 namespace Web.Controllers
 {
     public class AuthController : Controller
     {
         private readonly AuthenticationService _authenticationService = new();
-        private readonly UserRepository _userRepository = new();
+        private readonly UserService _userService = new();
 
         [HttpGet]
         public IActionResult Login(string returnUrl)
@@ -20,16 +26,32 @@ namespace Web.Controllers
 
 
         [HttpPost]
-        public IActionResult Login(LoginModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                if (_authenticationService.LoginCredentialsAreValid(model.Email, model.Password))
-                {
-                    return Redirect(string.IsNullOrEmpty(returnUrl) ? "/discussionform/overview" : returnUrl);
-                }
-                ModelState.AddModelError("invalid", "Invalid email or password");
+                return View(model);
             }
+
+            User user = _userService.GetByEmail(model.Email);
+            
+            if (_authenticationService.LoginCredentialsAreValid(model.Email, model.Password))
+            {
+                List<Claim> claims = new()
+                {
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, "admin")
+                };
+                
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
+                ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                
+                return Redirect(string.IsNullOrEmpty(returnUrl) ? "/groupchat/overview" : returnUrl);
+            }
+            
+            ModelState.AddModelError("invalid", "Ongeldig email of wachtwoord");
 
             return View(model);
         }
@@ -55,9 +77,17 @@ namespace Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _authenticationService.RegisterNewUser(model.Email, model.Password);
-                TempData["SuccessMessage"] = "Registration successful!";
+                try
+                {
+                    _authenticationService.RegisterNewUser(model.Email, model.Password);
+                    TempData["SuccessMessage"] = "De registratie is succesvol";
+                }
+                catch (EmailAlreadyExistsException e)
+                {
+                    ModelState.AddModelError("email", e.Message);
+                }
             }
+            
             return View(model);
         }
 
