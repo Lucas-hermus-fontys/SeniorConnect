@@ -14,13 +14,19 @@ namespace Web.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly AuthenticationService _authenticationService = new();
-        private readonly UserService _userService = new();
+        private readonly AuthenticationService _authenticationService;
+        private readonly UserService _userService;
+
+        public AuthController(UserService userService, AuthenticationService authenticationService)
+        {
+            _userService = userService;
+            _authenticationService = authenticationService;
+        }
 
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
-            ViewData["ReturnUrl"] = returnUrl;  
+            ViewData["ReturnUrl"] = returnUrl;
             return View(new LoginModel());
         }
 
@@ -34,32 +40,33 @@ namespace Web.Controllers
             }
 
             User user = _userService.GetByEmail(model.Email);
-            
+
             if (_authenticationService.LoginCredentialsAreValid(model.Email, model.Password))
             {
                 List<Claim> claims = new()
                 {
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, "admin")
+                    new Claim(ClaimTypes.Role, "admin"),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 };
-                
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
+
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                
+
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-                
+
                 return Redirect(string.IsNullOrEmpty(returnUrl) ? "/groupchat/overview" : returnUrl);
             }
-            
+
             ModelState.AddModelError("invalid", "Ongeldig email of wachtwoord");
 
             return View(model);
         }
-        
+
         [HttpPost]
         public IActionResult Logout()
         {
-
             Response.Cookies.Delete("AuthToken");
             return RedirectToAction("Login");
         }
@@ -87,7 +94,7 @@ namespace Web.Controllers
                     ModelState.AddModelError("email", e.Message);
                 }
             }
-            
+
             return View(model);
         }
 

@@ -5,8 +5,14 @@ namespace Domain.Util
 {
     public class CommandUtil
     {
-        private readonly MigrationCommand _migrationCommand = new();
-        private readonly TestCommand _testCommand = new();
+        private readonly MigrationCommand _migrationCommand;
+        private readonly TestCommand _testCommand;
+
+        public CommandUtil(MigrationCommand migrationCommand, TestCommand testCommand)
+        {
+            _migrationCommand = migrationCommand;
+            _testCommand = testCommand;
+        }
         public void RunAsCommand(String[] args)
         {
             switch (args[0])

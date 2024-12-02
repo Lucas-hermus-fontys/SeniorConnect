@@ -5,8 +5,14 @@ namespace Domain.Commands
 {
     public class MigrationCommand
     {
-        private readonly Migration _migration = new();
-        private readonly Seeder _seeder = new();
+        private readonly Migration _migration;
+        private readonly Seeder _seeder;
+
+        public MigrationCommand(Migration migration, Seeder seeder)
+        {
+            _migration = migration;
+            _seeder = seeder;
+        }
 
         public void MigrateDatabase(String[] args)
         {

@@ -1,14 +1,14 @@
-using Infrastructure.Util;
+using Infrastructure.Interface;
 
 namespace Infrastructure.Database
 {
     public class Seeder
     {
-        private readonly Database _database;
+        private readonly IDatabase _database;
 
-        public Seeder()
+        public Seeder(IDatabase database)
         {
-            _database = ServiceLocator.GetService<Database>();
+            _database = database;
         }
 
         public void SeedDatabase()

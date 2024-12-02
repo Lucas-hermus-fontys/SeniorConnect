@@ -1,13 +1,19 @@
 using Domain.Util;
 using Infrastructure.Database.Repository;
 using Infrastructure.Exception;
+using Infrastructure.Interface;
 using Infrastructure.Model;
 
 namespace Domain.Service;
 
 public class AuthenticationService
 {
-    private UserRepository _userRepository = new UserRepository();
+    private IUserRepository _userRepository;
+
+    public AuthenticationService(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
 
     public void RegisterNewUser(string email, string password)
     {

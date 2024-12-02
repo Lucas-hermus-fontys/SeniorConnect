@@ -1,24 +1,22 @@
-using System;
 using System.Data;
-using Infrastructure.Exception;
+using Infrastructure.Interface;
 using Infrastructure.Model;
 using Infrastructure.Transformer;
-using Infrastructure.Util;
 
 namespace Infrastructure.Database.Repository;
 
-public class UserRepository
+public class UserRepository : IUserRepository
 {
-    private readonly Database _databaseUtil;
+    private readonly IDatabase _database;
 
-    public UserRepository()
+    public UserRepository(IDatabase database)
     {
-        _databaseUtil = ServiceLocator.GetService<Database>();
+        _database = database;
     }
 
     public void CreateNewUser(User user)
     {
-        _databaseUtil.ExecuteQuery(
+        _database.ExecuteQuery(
             "INSERT INTO user (role_id, email, password, salt, active) VALUES (?, ?, ?, ?, ?);",
             user.UserRole.Id,
             user.Email,
@@ -30,7 +28,7 @@ public class UserRepository
 
     public User GetByEmail(string email)
     {
-        DataTable result = _databaseUtil.ExecuteQuery("Select * from user where email = ?;", email);
+        DataTable result = _database.ExecuteQuery("Select * from user where email = ?;", email);
         if (result.Rows.Count == 0)
         {
             return null;

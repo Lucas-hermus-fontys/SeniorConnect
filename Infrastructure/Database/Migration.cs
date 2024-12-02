@@ -1,20 +1,20 @@
 using System.IO;
-using Infrastructure.Util;
+using Infrastructure.Interface;
 
 namespace Infrastructure.Database;
 
 public class Migration
 {
-    private readonly Database _databaseUtil;
+    private readonly IDatabase _database;
 
-    public Migration()
+    public Migration(IDatabase database)
     {
-        _databaseUtil = ServiceLocator.GetService<Database>();
+        _database = database;
     }
     
     public void MigrateDatabase()
     {
         string query = File.ReadAllText("../Infrastructure/Database/Migrations/21-10-2024-11-14.sql");
-        _databaseUtil.ExecuteQuery(query);
+        _database.ExecuteQuery(query);
     }
 }

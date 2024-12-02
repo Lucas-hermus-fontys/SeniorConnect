@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Web.Models;
+using Web.DTO.GroupChat;
 
 namespace Web.Controllers
 {
@@ -10,7 +10,10 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Overview()
         {
-            return View();
+            Console.WriteLine( User.Identity.Name);
+            GroupChatDto groupChatDto = new GroupChatDto();
+            groupChatDto.User.DisplayName = "Lucas Hermus";
+            return View(groupChatDto);
         }
 
         public IActionResult Welcome()

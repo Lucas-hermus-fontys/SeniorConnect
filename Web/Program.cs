@@ -1,7 +1,10 @@
+using Domain.Commands;
+using Domain.Service;
 using Domain.Util;
 using Infrastructure.Database;
+using Infrastructure.Database.Repository;
+using Infrastructure.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using ServiceLocator = Infrastructure.Util.ServiceLocator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,7 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnCh
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+//some delicious home baked cookies by grandma herself.
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -21,11 +25,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddAuthorization();
 
+// dependency injection configuration
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddSingleton(new Database(connectionString));
+builder.Services.AddSingleton<IDatabase>(new Database(connectionString));
+
+
+builder.Services.AddScoped<Migration>();
+builder.Services.AddScoped<Seeder>();
+builder.Services.AddScoped<MigrationCommand>();
+builder.Services.AddScoped<TestCommand>();
+builder.Services.AddScoped<CommandUtil>();
+builder.Services.AddScoped<AuthenticationService>();
+
 
 var app = builder.Build();
-
-ServiceLocator.SetLocatorProvider(app.Services);
 
 if (!app.Environment.IsDevelopment())
 {
@@ -35,17 +50,17 @@ if (!app.Environment.IsDevelopment())
 
 if (args.Length > 0)
 {
-    CommandUtil commandUtil = new CommandUtil();
+    CommandUtil commandUtil = app.Services.GetRequiredService<CommandUtil>();
     commandUtil.RunAsCommand(args);
     return;
 }
+
+
 // new MigrationCommand().MigrateDatabase(new string[] { "", "seed" });
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

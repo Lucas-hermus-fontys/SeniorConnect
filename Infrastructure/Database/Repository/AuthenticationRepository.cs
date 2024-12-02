@@ -1,13 +1,13 @@
-using Infrastructure.Util;
+using Infrastructure.Interface;
 
 namespace Infrastructure.Database.Repository;
 
-public class AuthenticationRepository
+public class AuthenticationRepository : IAuthenticationRepository
 {
-    private readonly Database _databaseUtil;
+    private readonly IDatabase _database;
 
-    public AuthenticationRepository()
+    public AuthenticationRepository(IDatabase database)
     {
-        _databaseUtil = ServiceLocator.GetService<Database>();
+        _database = database;
     }
 }
