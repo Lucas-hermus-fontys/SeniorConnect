@@ -11,9 +11,7 @@ namespace Web.Controllers
         public IActionResult Overview()
         {
             Console.WriteLine( User.Identity.Name);
-            GroupChatDto groupChatDto = new GroupChatDto();
-            groupChatDto.User.DisplayName = "Lucas Hermus";
-            return View(groupChatDto);
+            return View(GroupChatBuilder.CreateFromParts());
         }
 
         public IActionResult Welcome()

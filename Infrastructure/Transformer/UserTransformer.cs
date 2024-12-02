@@ -12,7 +12,8 @@ public class UserTransformer
             UserRole = new UserRole { Id = (int) dataRow["role_id"]},
             Email = (string) dataRow["email"],
             Salt = (string) dataRow["salt"],
-            Password = (string) dataRow["password"]
+            Password = (string) dataRow["password"],
+            Id = (int) dataRow["id"]
         };
     }
 }

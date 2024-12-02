@@ -1,3 +1,5 @@
+@model Web.DTO.GroupChat.GroupChatDto
+
 @{
 Layout = null;
 }
@@ -92,7 +94,7 @@ Layout = null;
         .message {
             margin-left: 10px;
         }
-        
+
         .chat-input {
             padding: 10px 20px;
             border-top: 1px solid #e9ecef;
@@ -105,6 +107,10 @@ Layout = null;
             border-radius: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
+        .my-message {
+            margin-left: 50px; /* Indent the message */
+        }
     </style>
 </head>
 <body>
@@ -115,8 +121,8 @@ Layout = null;
             <i class="ml-3 far fa-bell"></i>
             <i class="ml-3 far fa-envelope"></i>
             <i class="ml-3 far fa-user"></i>
-            <span class="ml-3">James Doe</span>
-            <img src="https://via.placeholder.com/40" alt="James Doe's profile picture" class="ml-2">
+            <span class="ml-3">@Model.User.DisplayName</span>
+            <img src="@(@Model.User.ProfileImageUrl ?? "https://via.placeholder.com/40")" alt="User's profile picture" class="ml-2">
         </div>
     </div>
 </nav>
@@ -125,84 +131,36 @@ Layout = null;
     <div class="row">
         <!-- Conversations List -->
         <div class="col-md-4 conversations">
+            @foreach (var chat in Model.Chats)
+            {
+            var firstMessage = chat.Messages.FirstOrDefault();
             <div class="conversation-item">
-                <img src="https://via.placeholder.com/40" alt="Alan Husk's profile picture">
+                <img src="@(@firstMessage?.User.ProfileImageUrl ?? "https://via.placeholder.com/40")" alt="@firstMessage?.User.DisplayName's profile picture">
                 <div>
-                    <div class="name">Alan Husk</div>
-                    <div class="title">CEO</div>
-                    <div class="message">Agreed</div>
+                    <div class="name">@firstMessage?.User.DisplayName</div>
+                    <div class="message">@firstMessage?.Text</div>
                 </div>
-                <div class="time">30 minutes ago</div>
+                <div class="time">@firstMessage?.Time</div>
             </div>
-            <div class="conversation-item">
-                <img src="https://via.placeholder.com/40" alt="Betti Wood's profile picture profile-pic">
-                <div>
-                    <div class="name">Betti Wood</div>
-                    <div class="title">Head of Client Success</div>
-                    <div class="message">Hi Betti, the document has been e-signed.</div>
-                </div>
-                <div class="time">about 1 hour ago</div>
-            </div>
-            <div class="conversation-item">
-                <img src="https://via.placeholder.com/40" alt="Jenny Hart's profile picture">
-                <div>
-                    <div class="name">Jenny Hart</div>
-                    <div class="message">Hi Jenny, could we have that image please?</div>
-                </div>
-                <div class="time">about 18 hours ago</div>
-            </div>
-            <div class="conversation-item">
-                <img src="https://via.placeholder.com/40" alt="Simon Pegi's profile picture">
-                <div>
-                    <div class="name">Simon Pegi</div>
-                    <div class="title">UX/UI Designer</div>
-                    <div class="message">James, how's project Enigma going?</div>
-                </div>
-                <div class="time">about 21 hours ago</div>
-            </div>
+            }
         </div>
-
-        <!-- Chat Area -->
+        
         <div class="col-md-8 chat-area">
+            @if (Model.Chats.Any())
+            {
+            var firstChat = Model.Chats.First();
             <div class="chat-messages">
-                <div class="chat-message d-flex">
-                    <img src="https://via.placeholder.com/40" alt="Betti Wood's profile picture profile-pic">
-                    <div>
-                        <div class="message">
-                            Hi Betti, would you be available for a quick catch up at 3?
-                        </div>
-                        <div class="time">09:33</div>
-                    </div>
+                @foreach (var message in firstChat.Messages)
+                {
+                Boolean isMyMessage = message.User.Id == Model.User.Id; 
+                <div class="chat-message d-flex @((isMyMessage ? "flex-row-reverse" : ""))">
+                    <img src="@(@message.User.ProfileImageUrl ?? "https://via.placeholder.com/40")" alt="@message.User.DisplayName's profile picture">
+                        <div class="message">@message.Text</div>
+                        <div class="time">@message.Time</div>
                 </div>
-                <div class="chat-message d-flex">
-                    <img src="https://via.placeholder.com/40" alt="Betti Wood's profile picture profile-pic">
-                    <div>
-                        <div class="message">
-                            Morning, James. Sure!
-                        </div>
-                        <div class="time">09:58</div>
-                    </div>
-                </div>
-                <div class="chat-message d-flex">
-                    <img src="https://via.placeholder.com/40" alt="Betti Wood's profile picture profile-pic">
-                    <div>
-                        <div class="message">
-                            Would you want to go over the project notes?
-                        </div>
-                        <div class="time">09:58</div>
-                    </div>
-                </div>
-
-                <div class="chat-message d-flex flex-row-reverse">
-                    <img src="https://via.placeholder.com/40" class="test2" alt="James Doe's profile picture profile-pic">
-                    <div>
-                        <div class="message">
-                            Yes, it would be great!
-                        </div>
-                        <div class="time">10:54</div>
-                    </div>
-                </div>
+                }
             </div>
+            }
             <div class="chat-input">
                 <input type="text" placeholder="Start typing to reply...">
             </div>
