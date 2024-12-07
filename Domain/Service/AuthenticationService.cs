@@ -1,8 +1,7 @@
+using Domain.Exception;
+using Domain.Interface;
+using Domain.Model;
 using Domain.Util;
-using Infrastructure.Database.Repository;
-using Infrastructure.Exception;
-using Infrastructure.Interface;
-using Infrastructure.Model;
 
 namespace Domain.Service;
 

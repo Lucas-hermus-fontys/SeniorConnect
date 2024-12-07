@@ -1,9 +1,7 @@
-using System.Data;
 using System.Security.Claims;
+using Domain.Exception;
+using Domain.Model;
 using Domain.Service;
-using Infrastructure.Database.Repository;
-using Infrastructure.Exception;
-using Infrastructure.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;

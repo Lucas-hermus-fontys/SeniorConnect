@@ -1,6 +1,6 @@
 using System;
 
-namespace Infrastructure.Model;
+namespace Domain.Model;
 
 public class User
 {

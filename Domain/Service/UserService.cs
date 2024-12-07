@@ -1,7 +1,6 @@
-using Infrastructure.Database.Repository;
-using Infrastructure.Exception;
-using Infrastructure.Interface;
-using Infrastructure.Model;
+using Domain.Exception;
+using Domain.Interface;
+using Domain.Model;
 
 namespace Domain.Service;
 
@@ -20,7 +19,7 @@ public class UserService
         {
             return _userRepository.GetByEmail(email);
         }
-        catch (Exception e)
+        catch (System.Exception e)
         {
             Console.WriteLine(e.Message);
             throw new UserNotFoundException();

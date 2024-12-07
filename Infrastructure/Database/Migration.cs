@@ -1,9 +1,9 @@
 using System.IO;
-using Infrastructure.Interface;
+using Domain.Interface;
 
 namespace Infrastructure.Database;
 
-public class Migration
+public class Migration : IMigration
 {
     private readonly IDatabase _database;
 

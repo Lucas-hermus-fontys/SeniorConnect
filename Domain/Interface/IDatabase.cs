@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 
-namespace Infrastructure.Interface;
+namespace Domain.Interface;
 
 public interface IDatabase
 {

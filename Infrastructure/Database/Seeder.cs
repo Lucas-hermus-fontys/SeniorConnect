@@ -1,8 +1,8 @@
-using Infrastructure.Interface;
+using Domain.Interface;
 
 namespace Infrastructure.Database
 {
-    public class Seeder
+    public class Seeder : ISeeder
     {
         private readonly IDatabase _database;
 

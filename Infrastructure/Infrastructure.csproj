@@ -11,7 +11,10 @@
 
   <ItemGroup>
     <Folder Include="Database\Util\" />
-    <Folder Include="Util\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,12 @@
-using Infrastructure.Database;
+using Domain.Interface;
 
 namespace Domain.Commands;
 
 public class TestCommand
 {
-    private readonly Seeder _seeder;
+    private readonly ISeeder _seeder;
 
-    public TestCommand(Seeder seeder)
+    public TestCommand(ISeeder seeder)
     {
         _seeder = seeder;
     }

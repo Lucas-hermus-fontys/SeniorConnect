@@ -1,9 +1,9 @@
 using Domain.Commands;
+using Domain.Interface;
 using Domain.Service;
 using Domain.Util;
 using Infrastructure.Database;
 using Infrastructure.Database.Repository;
-using Infrastructure.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +30,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddSingleton(new Database(connectionString));
 builder.Services.AddSingleton<IDatabase>(new Database(connectionString));
+builder.Services.AddScoped<IMigration, Migration>();
+builder.Services.AddScoped<ISeeder, Seeder>();
 
 
 builder.Services.AddScoped<Migration>();
@@ -38,6 +40,7 @@ builder.Services.AddScoped<MigrationCommand>();
 builder.Services.AddScoped<TestCommand>();
 builder.Services.AddScoped<CommandUtil>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<MigrationCommand>();
 
 
 var app = builder.Build();

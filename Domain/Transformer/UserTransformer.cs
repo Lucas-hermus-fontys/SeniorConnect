@@ -1,7 +1,7 @@
 using System.Data;
-using Infrastructure.Model;
+using Domain.Model;
 
-namespace Infrastructure.Transformer;
+namespace Domain.Transformer;
 
 public class UserTransformer
 {

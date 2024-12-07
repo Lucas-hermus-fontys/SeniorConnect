@@ -1,14 +1,14 @@
-using Infrastructure.Database;
+using Domain.Interface;
 using Server.Domain.Util;
 
 namespace Domain.Commands
 {
     public class MigrationCommand
     {
-        private readonly Migration _migration;
-        private readonly Seeder _seeder;
+        private readonly IMigration _migration;
+        private readonly ISeeder _seeder;
 
-        public MigrationCommand(Migration migration, Seeder seeder)
+        public MigrationCommand(IMigration migration, ISeeder seeder)
         {
             _migration = migration;
             _seeder = seeder;

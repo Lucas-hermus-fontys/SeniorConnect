@@ -1,7 +1,7 @@
 using System.Data;
-using Infrastructure.Interface;
-using Infrastructure.Model;
-using Infrastructure.Transformer;
+using Domain.Interface;
+using Domain.Model;
+using Domain.Transformer;
 
 namespace Infrastructure.Database.Repository;
 

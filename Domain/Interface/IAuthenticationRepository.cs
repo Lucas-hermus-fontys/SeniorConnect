@@ -1,4 +1,4 @@
-namespace Infrastructure.Interface;
+namespace Domain.Interface;
 
 public interface IAuthenticationRepository
 {

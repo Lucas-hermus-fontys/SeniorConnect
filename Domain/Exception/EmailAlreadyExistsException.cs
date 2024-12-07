@@ -1,4 +1,4 @@
-namespace Infrastructure.Exception
+namespace Domain.Exception
 {
     public class EmailAlreadyExistsException : System.Exception
     {

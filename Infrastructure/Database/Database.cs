@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Infrastructure.Interface;
+using Domain.Interface;
 using MySql.Data.MySqlClient;
 
 namespace Infrastructure.Database
