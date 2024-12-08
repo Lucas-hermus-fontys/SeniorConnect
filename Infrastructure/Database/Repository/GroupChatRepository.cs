@@ -21,7 +21,7 @@ public class GroupChatRepository : IGroupChatRepository
         
         using (MySqlDatabaseCommand userCommand = new MySqlDatabaseCommand())
         {
-            users = _database.ExecuteQueryWithCommand<CollaborativeSpace>(userCommand, "SELECT id, name, is_direct_message, is_active, description, image_url, created_at, updated_at FROM collaborative_space_user INNER JOIN collaborative_space ON collaborative_space_user.collaborative_space_id = collaborative_space.id WHERE collaborative_space_user.user_id = ?;", userId);
+            users = _database.ExecuteQueryWithCommand<CollaborativeSpace>(userCommand, "SELECT * FROM collaborative_space_user INNER JOIN collaborative_space ON collaborative_space_user.collaborative_space_id = collaborative_space.id WHERE collaborative_space_user.user_id = ?;", userId);
         }
 
         return users;

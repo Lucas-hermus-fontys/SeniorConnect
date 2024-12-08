@@ -106,7 +106,18 @@ namespace Infrastructure.Database
                 string snakeCaseName = property.Name.ToSnakeCase();
                 if (record.HasColumn(snakeCaseName) && !record.IsDBNull(record.GetOrdinal(snakeCaseName)))
                 {
-                    property.SetValue(obj, record[snakeCaseName]);
+                    var value = record[snakeCaseName];
+                    if (property.PropertyType.IsEnum)
+                    {
+                        // Get the enum type name based on the naming convention
+                        string enumTypeName = $"{typeof(T).Name}{property.Name}";
+                        var enumType = Type.GetType("Domain.Enum." + enumTypeName +  ", Domain");
+                        if (enumType != null)
+                        {
+                            value = EnumExtensions.ParseEnum(enumType, value.ToString());
+                        }
+                    }
+                    property.SetValue(obj, value);
                 }
             }
 
