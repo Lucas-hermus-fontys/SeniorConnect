@@ -62,10 +62,11 @@ namespace Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public IActionResult Logout()
+        [HttpGet]
+        public IActionResult Sign_out()
         {
-            Response.Cookies.Delete("AuthToken");
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             return RedirectToAction("Login");
         }
 

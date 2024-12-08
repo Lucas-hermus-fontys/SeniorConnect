@@ -14,7 +14,7 @@ public class Migration : IMigration
     
     public void MigrateDatabase()
     {
-        string query = File.ReadAllText("../Infrastructure/Database/Migrations/21-10-2024-11-14.sql");
+        string query = File.ReadAllText("../Infrastructure/Database/Migrations/07-12-2024.sql");
         _database.ExecuteQuery(query);
     }
 }

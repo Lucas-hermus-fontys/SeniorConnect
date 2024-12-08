@@ -1,4 +1,5 @@
-@model Web.DTO.GroupChat.GroupChatDto
+@using Web.DTO.GroupChat
+@model Web.DTO.GroupChat.GroupChatDTO
 
 @{
 Layout = null;
@@ -107,9 +108,34 @@ Layout = null;
             border-radius: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+        
+        .dropdown-toggle {
+            border: none !important; 
+            outline: none !important; 
+            padding: 0; 
+            text-decoration: none; 
+        }
 
-        .my-message {
-            margin-left: 50px; /* Indent the message */
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        .dropdown-item {
+            color: #000 !important;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-toggle:focus {
+            box-shadow: none !important; 
+        }
+        
+        .dropdown-toggle:hover,
+        .dropdown-toggle:focus,
+        .dropdown-toggle:active {
+            text-decoration: none; 
         }
     </style>
 </head>
@@ -120,9 +146,18 @@ Layout = null;
         <div class="ml-auto d-flex align-items-center">
             <i class="ml-3 far fa-bell"></i>
             <i class="ml-3 far fa-envelope"></i>
-            <i class="ml-3 far fa-user"></i>
-            <span class="ml-3">@Model.User.DisplayName</span>
-            <img src="@(@Model.User.ProfileImageUrl ?? "https://via.placeholder.com/40")" alt="User's profile picture" class="ml-2">
+
+            <!-- Profile Dropdown -->
+            <div class="dropdown ml-3">
+                <button class="btn btn-link dropdown-toggle" type="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="@(@Model.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="" class="ml-2 profile-pic">
+                    <span class="ml-3">@Model.User.DisplayName</span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                    <a class="dropdown-item" href="#">Profiel</a>
+                    <a class="dropdown-item" href="/auth/Sign_out">Uitloggen</a> <!-- Replace with your actual sign-out link -->
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -131,32 +166,29 @@ Layout = null;
     <div class="row">
         <!-- Conversations List -->
         <div class="col-md-4 conversations">
-            @foreach (var chat in Model.Chats)
+            @foreach (ChatDTO chat in Model.Chats)
             {
-            var firstMessage = chat.Messages.FirstOrDefault();
             <div class="conversation-item">
-                <img src="@(@firstMessage?.User.ProfileImageUrl ?? "https://via.placeholder.com/40")" alt="@firstMessage?.User.DisplayName's profile picture">
+                <img src="@(@chat.Image ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="">
                 <div>
-                    <div class="name">@firstMessage?.User.DisplayName</div>
-                    <div class="message">@firstMessage?.Text</div>
+                    <div class="name">@chat.Name</div>
+                    <div class="message">@chat.LastMessage?.Text</div>
                 </div>
-                <div class="time">@firstMessage?.Time</div>
+                <div class="time">@chat.LastMessage?.Time</div>
             </div>
             }
         </div>
-        
+
         <div class="col-md-8 chat-area">
             @if (Model.Chats.Any())
             {
-            var firstChat = Model.Chats.First();
             <div class="chat-messages">
-                @foreach (var message in firstChat.Messages)
+                @foreach (MessageDTO message in Model.Messages)
                 {
-                Boolean isMyMessage = message.User.Id == Model.User.Id; 
-                <div class="chat-message d-flex @((isMyMessage ? "flex-row-reverse" : ""))">
-                    <img src="@(@message.User.ProfileImageUrl ?? "https://via.placeholder.com/40")" alt="@message.User.DisplayName's profile picture">
-                        <div class="message">@message.Text</div>
-                        <div class="time">@message.Time</div>
+                <div class="chat-message d-flex @((message.User.Id == Model.User.Id ? "flex-row-reverse" : ""))">
+                    <img src="@(@message.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="">
+                    <div class="message">@message.Text</div>
+                    <div class="time">@message.Time</div>
                 </div>
                 }
             </div>

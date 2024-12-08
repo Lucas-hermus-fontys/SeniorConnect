@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -25,23 +24,23 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddAuthorization();
 
-// dependency injection configuration
+// Dependency injection configuration
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddSingleton(new Database(connectionString));
 builder.Services.AddSingleton<IDatabase>(new Database(connectionString));
 builder.Services.AddScoped<IMigration, Migration>();
 builder.Services.AddScoped<ISeeder, Seeder>();
-
-
 builder.Services.AddScoped<Migration>();
 builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<MigrationCommand>();
 builder.Services.AddScoped<TestCommand>();
-builder.Services.AddScoped<CommandUtil>();
 builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<MigrationCommand>();
-
+builder.Services.AddScoped<CommandUtil>();
+builder.Services.AddScoped<IFactory, Factory>();
+builder.Services.AddScoped<Factory>();
+builder.Services.AddScoped<IGroupChatRepository, GroupChatRepository>();
+builder.Services.AddScoped<GroupChatRepository>();
 
 var app = builder.Build();
 
@@ -53,13 +52,13 @@ if (!app.Environment.IsDevelopment())
 
 if (args.Length > 0)
 {
-    CommandUtil commandUtil = app.Services.GetRequiredService<CommandUtil>();
-    commandUtil.RunAsCommand(args);
-    return;
+    using (var scope = app.Services.CreateScope())
+    {
+        var commandUtil = scope.ServiceProvider.GetRequiredService<CommandUtil>();
+        commandUtil.RunAsCommand(args);
+        return;
+    }
 }
-
-
-// new MigrationCommand().MigrateDatabase(new string[] { "", "seed" });
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
