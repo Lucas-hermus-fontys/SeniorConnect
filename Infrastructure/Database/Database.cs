@@ -109,7 +109,6 @@ namespace Infrastructure.Database
                     var value = record[snakeCaseName];
                     if (property.PropertyType.IsEnum)
                     {
-                        // Get the enum type name based on the naming convention
                         string enumTypeName = $"{typeof(T).Name}{property.Name}";
                         var enumType = Type.GetType("Domain.Enum." + enumTypeName +  ", Domain");
                         if (enumType != null)

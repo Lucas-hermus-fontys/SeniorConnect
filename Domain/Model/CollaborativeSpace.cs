@@ -13,4 +13,5 @@ public class CollaborativeSpace
     public string ImageUrl { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public List<CollaborativeSpaceMessage> CollaborativeSpaceMessages { get; set; } = new List<CollaborativeSpaceMessage>();
 }
