@@ -24,18 +24,14 @@ public class GroupChatRepository : IGroupChatRepository
         {
             groupChats = _database.ExecuteQueryWithCommand<CollaborativeSpace>(userCommand, "SELECT * FROM collaborative_space_user INNER JOIN collaborative_space ON collaborative_space_user.collaborative_space_id = collaborative_space.id WHERE collaborative_space_user.user_id = ?;", userId);
             
-            List<int> collaborativeSpaceIds = groupChats.Select(g => g.Id).ToList();
+            List<CollaborativeSpaceMessage> messages = _database.ExecuteQueryWithCommand<CollaborativeSpaceMessage>(userCommand, "SELECT id, collaborative_space_id, user_id FROM collaborative_space_message WHERE collaborative_space_id in (" + string.Join(",", groupChats.Select(g => g.Id).ToList()) + ");");
             
-            List<CollaborativeSpaceMessage> messages = _database.ExecuteQueryWithCommand<CollaborativeSpaceMessage>(userCommand, "SELECT id, collaborative_space_id FROM collaborative_space_message WHERE collaborative_space_id in (" + string.Join(",", collaborativeSpaceIds) + ");");
+            List<User> users = _database.ExecuteQueryWithCommand<User>(userCommand, "SELECT * FROM user WHERE id in (" + string.Join(",", messages.Select(g => g.Id).ToList()) + ");");
             
-            foreach (CollaborativeSpaceMessage message in messages)
-            {
-                CollaborativeSpace groupChat = groupChats.FirstOrDefault(o => o.Id == message.CollaborativeSpaceId);
-                if (groupChat != null)
-                {
-                    groupChat.CollaborativeSpaceMessages.Add(message);
-                }
-            }
+            messages.ForEach(message => message.User = users.FirstOrDefault(user => user.Id == message.UserId));
+            
+            messages.ForEach(message => groupChats.FirstOrDefault(o => o.Id == message.CollaborativeSpaceId)?.CollaborativeSpaceMessages.Add(message));
+
         }
 
         return groupChats;
