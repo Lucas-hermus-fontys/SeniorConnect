@@ -14,4 +14,6 @@ public class CollaborativeSpace
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public List<CollaborativeSpaceMessage> CollaborativeSpaceMessages { get; set; } = new List<CollaborativeSpaceMessage>();
+    
+    public List<User> CollaborativeSpaceUsers { get; set; } = new List<User>();
 }

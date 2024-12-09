@@ -4,83 +4,67 @@ namespace Web.DTO.GroupChat
 {
     public class GroupChatBuilder
     {
-        public static GroupChatDTO CreateFromParts(User user)
+        public static GroupChatDTO CreateFromParts(User user, List<CollaborativeSpace> collaborativeSpaces)
         {
+            List<ChatDTO> chats = new List<ChatDTO>();
+            List<MessageDTO> messages = new List<MessageDTO>();
+
+            UserDTO userDTO = new UserDTO
+            {
+                Id = user.Id,
+                DisplayName = user.FirstName + " " + user.LastName,
+                ProfileImageUrl = user.ProfilePictureUrl
+            };
+
+            if (collaborativeSpaces == null)
+            {
+                return new GroupChatDTO
+                {
+                    User = userDTO,
+                    Chats = new List<ChatDTO>(),
+                    Messages = new List<MessageDTO>()
+                };
+            }
+
+            foreach (var spaceMessage in collaborativeSpaces[0].CollaborativeSpaceMessages)
+            {
+                MessageDTO message = new MessageDTO();
+                message.Text = spaceMessage.Message;
+                message.User = new UserDTO
+                {
+                    Id = spaceMessage.User.Id,
+                    DisplayName = spaceMessage.User.FirstName + " " + spaceMessage.User.LastName,
+                    ProfileImageUrl = spaceMessage.User.ProfilePictureUrl
+                };
+                message.Time = spaceMessage.CreatedAt.ToString("HH:mm");
+                messages.Add(message);
+            }
+
+            foreach (var space in collaborativeSpaces)
+            {
+                ChatDTO chat = new ChatDTO();
+                if (space.IsDirectMessage)
+                {
+                    User recievingUser = space.CollaborativeSpaceUsers.FirstOrDefault(obj => obj.Id != user.Id);
+                    if (recievingUser == null) { throw new ArgumentNullException(nameof(recievingUser), "User cannot be null"); }
+
+                    chat.Image = recievingUser.ProfilePictureUrl;
+                    chat.Name = recievingUser.FirstName + " " + recievingUser.LastName;
+                }
+                else
+                {
+                    chat.Image = space.ImageUrl;
+                    chat.Name = space.Name;
+                }
+                
+                chats.Add(chat);
+            }
+            
             return new GroupChatDTO
             {
-                User = new UserDTO
-                {
-                    Id = user.Id,
-                    DisplayName = user.FirstName + " " + user.LastName,
-                    ProfileImageUrl = user.ProfilePictureUrl
-                },
-                Chats = new List<ChatDTO>
-                {
-                    new ChatDTO
-                    {
-                        Name = "Steve Harvey",
-                        Image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfdW6ZBMcdc9kFg2oIJeAqffG6msNMZ5e2zQ&s",
-                        LastMessage = 
-                            new MessageDTO
-                            {
-                                Time = "9:12",
-                                Text = "Hello Lucas Hermus!",
-                                Image = null,
-                                User = new UserDTO
-                                {
-                                    Id = 7,
-                                    DisplayName = "Steve Harvey",
-                                    ProfileImageUrl =
-                                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfdW6ZBMcdc9kFg2oIJeAqffG6msNMZ5e2zQ&s"
-                                }
-                            },
-                    },
-                    new ChatDTO
-                    {
-                        Name = "John krasinski ",
-                        Image = "https://hips.hearstapps.com/hmg-prod/images/john-krasinski-GettyImages-517027236_1600.jpg?resize=980:*",
-                        LastMessage = new MessageDTO
-                        {
-                            Time = "14:34",
-                            Text = "Hi how are you today?",
-                            Image = null,
-                            User = new UserDTO
-                            {
-                                Id = 8,
-                                DisplayName = "john krasinski",
-                                ProfileImageUrl =
-                                    "https://hips.hearstapps.com/hmg-prod/images/john-krasinski-GettyImages-517027236_1600.jpg?resize=980:*"
-                            }
-                        }
-                    }
-                },
-                Messages = new List<MessageDTO>
-                {
-                    new MessageDTO
-                    {
-                        Time = "9:12",
-                        Text = "Hello Lucas Hermus!",
-                        Image = null,
-                        User = new UserDTO
-                        {
-                            Id = 7,
-                            DisplayName = "Steve Harvey",
-                            ProfileImageUrl =
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfdW6ZBMcdc9kFg2oIJeAqffG6msNMZ5e2zQ&s"
-                        }
-                    },
-                    new MessageDTO
-                    {
-                        Time = "9:12",
-                        Text = "Hello Steve!",
-                        Image = null,
-                        User = new UserDTO
-                        {
-                            Id = 5,
-                            DisplayName = "Lucas hermus",
-                        }
-                    }
-                }
+                User = userDTO,
+                Chats = chats,
+                Messages = messages
             };
         }
     }

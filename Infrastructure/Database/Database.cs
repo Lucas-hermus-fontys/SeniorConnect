@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using Domain.Interface;
 using Domain.Util;
@@ -55,45 +56,51 @@ namespace Infrastructure.Database
             }
         }
         
-        public List<T> ExecuteQueryWithCommand<T>(IDatabaseCommand command, string query, params object[] parameters) where T : new()
+        public List<T> ExecuteQueryAndMap<T>(string query, List<object> parameters) where T : new()
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                var mySqlCommand = command as MySqlDatabaseCommand;
-                if (mySqlCommand == null)
-                    throw new ArgumentException("Command must be of type MySqlDatabaseCommand", nameof(command));
-
-                mySqlCommand.Connection = connection;
-                
-                for (int i = 0; i < parameters.Length; i++)
+                using (MySqlCommand mySqlCommand = new MySqlCommand())
                 {
-                    int index = query.IndexOf('?');
-                    if (index < 0) break;
-
-                    query = query.Remove(index, 1).Insert(index, $"@param{i}");
-                }
-
-                mySqlCommand.CommandText = query;
-                
-                if (parameters.Length > 0)
-                {
-                    for (int i = 0; i < parameters.Length; i++)
+                    mySqlCommand.Connection = connection;
+        
+                    for (int i = 0; i < parameters.Count; i++)
                     {
-                        mySqlCommand.AddParameter($"@param{i}", parameters[i]);
+                        int index = query.IndexOf('?');
+                        if (index < 0) break;
+
+                        query = query.Remove(index, 1).Insert(index, $"@param{i}");
                     }
-                }
-                
-                using (IDataReader reader = mySqlCommand.ExecuteReader())
-                {
-                    var results = new List<T>();
-                    while (reader.Read())
+
+                    mySqlCommand.CommandText = query;
+
+                    if (parameters.Count > 0)
                     {
-                        results.Add(MapToObject<T>(reader));
+                        for (int i = 0; i < parameters.Count; i++)
+                        {
+                            mySqlCommand.Parameters.AddWithValue($"@param{i}", parameters[i]);
+                        }
                     }
-                    return results;
+
+                    using (IDataReader reader = mySqlCommand.ExecuteReader())
+                    {
+                        var results = new List<T>();
+                        while (reader.Read())
+                        {
+                            results.Add(MapToObject<T>(reader));
+                        }
+                        return results;
+                    }
                 }
             }
+        }
+        
+        public List<T> ExecuteQueryAndMap<T>(string query, List<int> parameters) where T : new()
+        {
+            List<object> objectParameters = parameters.Cast<object>().ToList();
+    
+            return ExecuteQueryAndMap<T>(query, objectParameters);
         }
         
         private T MapToObject<T>(IDataRecord record) where T : new()

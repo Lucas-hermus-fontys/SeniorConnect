@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using Domain.Interface;
 using Domain.Model;
+using Domain.Util;
 using MySql.Data.MySqlClient;
 
 namespace Infrastructure.Database.Repository;
@@ -18,23 +19,28 @@ public class GroupChatRepository : IGroupChatRepository
 
     public List<CollaborativeSpace> GetGroupChatsByUserId(int userId)
     {
-        List<CollaborativeSpace> groupChats = new List<CollaborativeSpace>();
-        
-        using (MySqlDatabaseCommand userCommand = new MySqlDatabaseCommand())
-        {
-            groupChats = _database.ExecuteQueryWithCommand<CollaborativeSpace>(userCommand, "SELECT * FROM collaborative_space_user INNER JOIN collaborative_space ON collaborative_space_user.collaborative_space_id = collaborative_space.id WHERE collaborative_space_user.user_id = ?;", userId);
-            
-            List<CollaborativeSpaceMessage> messages = _database.ExecuteQueryWithCommand<CollaborativeSpaceMessage>(userCommand, "SELECT id, collaborative_space_id, user_id FROM collaborative_space_message WHERE collaborative_space_id in (" + string.Join(",", groupChats.Select(g => g.Id).ToList()) + ");");
-            
-            List<User> users = _database.ExecuteQueryWithCommand<User>(userCommand, "SELECT * FROM user WHERE id in (" + string.Join(",", messages.Select(g => g.Id).ToList()) + ");");
-            
-            messages.ForEach(message => message.User = users.FirstOrDefault(user => user.Id == message.UserId));
-            
-            messages.ForEach(message => groupChats.FirstOrDefault(o => o.Id == message.CollaborativeSpaceId)?.CollaborativeSpaceMessages.Add(message));
+        string query = @"SELECT * FROM collaborative_space_user 
+                            INNER JOIN collaborative_space 
+                            ON collaborative_space_user.collaborative_space_id = collaborative_space.id
+                            WHERE collaborative_space_user.user_id = ?;";
 
-        }
-
-        return groupChats;
+        return _database.ExecuteQueryAndMap<CollaborativeSpace>(query, new List<int> { userId });
     }
 
+    public List<CollaborativeSpaceMessage> GetGroupChatMessagesByGroupChatId(int groupChatId)
+    {
+        string query = "SELECT * FROM collaborative_space_message WHERE collaborative_space_id = ?";
+        return _database.ExecuteQueryAndMap<CollaborativeSpaceMessage>(query, new List<int> { groupChatId });
+    }
+
+    public List<User> GetUsersByGroupChatIds(List<int> groupChatIds)
+    {
+        string query = @"
+                    SELECT u.*, csi.collaborative_space_id, c.* FROM user u
+                    JOIN collaborative_space_user csi ON u.id = csi.user_id
+                    JOIN collaborative_space c ON csi.collaborative_space_id = c.id
+                    WHERE c.id IN ( " + groupChatIds.GeneratePlaceholderList() + " );";
+        
+        return _database.ExecuteQueryAndMap<User>(query, groupChatIds);
+    }      
 }
