@@ -15,11 +15,7 @@ public class GroupChatService
     public List<CollaborativeSpace> GetGroupChatsByUserId(int userId)
     {
         List<CollaborativeSpace> groupChats = _groupChatRepository.GetGroupChatsByUserId(userId);
-        if (groupChats.Count == 0)
-        {
-            return null;
-            
-        }
+        if (groupChats.Count == 0) { return new List<CollaborativeSpace>(); }
         List<CollaborativeSpaceMessage> messages = _groupChatRepository.GetGroupChatMessagesByGroupChatId(groupChats[0].Id);
         List<User> users = _groupChatRepository.GetUsersByGroupChatIds(groupChats.Select(g => g.Id).ToList());
         messages.ForEach(message => message.User = users.FirstOrDefault(user => user.Id == message.UserId));

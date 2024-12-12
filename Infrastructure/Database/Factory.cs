@@ -53,14 +53,11 @@ public class Factory : IFactory
 
     private void CreateTestDirectMessage()
     {
-        // Faker faker = new Faker("nl");
         DataTable users = _database.ExecuteQuery("SELECT * FROM user WHERE role_id = 2 and id not in (1, 2, 3) ORDER BY id LIMIT 2;");
         _database.ExecuteQuery(
             "INSERT INTO collaborative_space (name, type, is_direct_message, is_active, description, image_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
             null, CollaborativeSpaceType.CHAT.ToString(), true, true, null, null, DateTime.Now, null
         );
-
-        // DataTable chat = _database.ExecuteQuery("SELECT * FROM collaborative_space order by id desc limit 1;");
         
         _database.ExecuteQuery(
             "INSERT INTO collaborative_space_user (user_id, collaborative_space_id, is_creator) VALUES (?, ?, ?),(?, ?, ?);",

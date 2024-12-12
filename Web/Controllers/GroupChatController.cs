@@ -37,6 +37,13 @@ namespace Web.Controllers
             return View(GroupChatBuilder.CreateFromParts(user, groupChats));
         }
 
+        [Authorize]
+        [HttpPost]
+        public void Test()
+        {
+            Console.WriteLine("test");
+        }
+
         public IActionResult Welcome()
         {
             return View();

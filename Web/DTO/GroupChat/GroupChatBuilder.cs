@@ -16,7 +16,7 @@ namespace Web.DTO.GroupChat
                 ProfileImageUrl = user.ProfilePictureUrl
             };
 
-            if (collaborativeSpaces == null)
+            if (collaborativeSpaces.Count == 0)
             {
                 return new GroupChatDTO
                 {
