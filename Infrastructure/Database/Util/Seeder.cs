@@ -1,6 +1,6 @@
 using Domain.Interface;
 
-namespace Infrastructure.Database
+namespace Infrastructure.Database.Util
 {
     public class Seeder : ISeeder
     {

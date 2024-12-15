@@ -206,7 +206,6 @@ CREATE TABLE questions
     CONSTRAINT questions_ibfk_1 FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE
 );
 
-
-FOREIGN_KEY_CHECKS = 1;
+SET FOREIGN_KEY_CHECKS = 1;
 
 COMMIT;

@@ -24,4 +24,9 @@ public class GroupChatService
         
         return groupChats;
     }
+
+    public void CreateMessage(User user, string message, int groupChatId)
+    {
+        _groupChatRepository.CreateMessage(user.Id, message, groupChatId);
+    }
 }

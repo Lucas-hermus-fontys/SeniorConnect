@@ -1,7 +1,7 @@
 using System.IO;
 using Domain.Interface;
 
-namespace Infrastructure.Database;
+namespace Infrastructure.Database.Util;
 
 public class Migration : IMigration
 {
@@ -11,10 +11,10 @@ public class Migration : IMigration
     {
         _database = database;
     }
-    
+
     public void MigrateDatabase()
     {
-        string query = File.ReadAllText("../Infrastructure/Database/Migrations/07-12-2024.sql");
+        string query = File.ReadAllText("../Infrastructure/Database/Migrations/12-12-2024_v1.4.sql");
         _database.ExecuteQuery(query);
     }
 }

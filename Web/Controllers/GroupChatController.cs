@@ -37,11 +37,18 @@ namespace Web.Controllers
             return View(GroupChatBuilder.CreateFromParts(user, groupChats));
         }
 
-        [Authorize]
         [HttpPost]
-        public void Test()
+        [Authorize]
+        public IActionResult SendMessage([FromForm] string message, [FromForm] int groupChatId)
         {
-            Console.WriteLine("test");
+            string emailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+            
+            if (string.IsNullOrEmpty(emailClaim)) { return Unauthorized(); }
+            
+            User user = _userService.GetByEmail(emailClaim);
+            _groupChatService.CreateMessage(user, message, groupChatId);
+            
+            return RedirectToAction("Overview"); 
         }
 
         public IActionResult Welcome()

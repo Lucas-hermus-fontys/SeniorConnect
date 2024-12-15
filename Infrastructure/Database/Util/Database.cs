@@ -7,7 +7,7 @@ using Domain.Interface;
 using Domain.Util;
 using MySql.Data.MySqlClient;
 
-namespace Infrastructure.Database
+namespace Infrastructure.Database.Util
 
 {
     public class Database : IDatabase

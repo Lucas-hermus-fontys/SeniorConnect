@@ -2,7 +2,7 @@ using Domain.Commands;
 using Domain.Interface;
 using Domain.Service;
 using Domain.Util;
-using Infrastructure.Database;
+using Infrastructure.Database.Util;
 using Infrastructure.Database.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -13,7 +13,6 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnCh
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-//some delicious home baked cookies by grandma herself.
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -60,6 +59,7 @@ if (args.Length > 0)
         return;
     }
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

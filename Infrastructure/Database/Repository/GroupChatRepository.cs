@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -20,9 +21,9 @@ public class GroupChatRepository : IGroupChatRepository
     public List<CollaborativeSpace> GetGroupChatsByUserId(int userId)
     {
         string query = @"SELECT * FROM collaborative_space_user 
-                            INNER JOIN collaborative_space 
-                            ON collaborative_space_user.collaborative_space_id = collaborative_space.id
-                            WHERE collaborative_space_user.user_id = ?;";
+                        INNER JOIN collaborative_space 
+                        ON collaborative_space_user.collaborative_space_id = collaborative_space.id
+                        WHERE collaborative_space_user.user_id = ? AND type = 'CHAT'";
 
         return _database.ExecuteQueryAndMap<CollaborativeSpace>(query, new List<int> { userId });
     }
@@ -42,5 +43,17 @@ public class GroupChatRepository : IGroupChatRepository
                     WHERE c.id IN ( " + groupChatIds.GeneratePlaceholderList() + " );";
         
         return _database.ExecuteQueryAndMap<User>(query, groupChatIds);
-    }      
+    }
+
+    public void CreateMessage(int userId, string message, int groupChatId)
+    {
+        _database.ExecuteQuery(
+            "INSERT INTO collaborative_space_message (user_id, collaborative_space_id, message, is_active, created_at) VALUES (?, ?, ?, ?, ?)",
+            userId,
+            groupChatId,
+            message,
+            true,
+            DateTime.Now
+        );
+    }
 }

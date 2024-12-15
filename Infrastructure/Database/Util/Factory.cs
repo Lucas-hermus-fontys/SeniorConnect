@@ -4,7 +4,7 @@ using Bogus;
 using Domain.Enum;
 using Domain.Interface;
 
-namespace Infrastructure.Database;
+namespace Infrastructure.Database.Util;
 
 public class Factory : IFactory
 {
@@ -17,6 +17,7 @@ public class Factory : IFactory
 
     public void PopulateTestData()
     {
+        tempTest();
         for (int i = 0; i < 10; i++)
         {
             CreateTestUser(1);
@@ -25,6 +26,51 @@ public class Factory : IFactory
         }
 
         CreateTestDirectMessage();
+    }
+
+    private void tempTest()
+    {
+        Faker faker = new Faker("nl");
+        Person person = faker.Person;
+
+        _database.ExecuteQuery(
+            "INSERT INTO user (role_id, email, password, salt, active, first_name, last_name, phone_number, postal_code, country, city, date_of_birth, profile_picture_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+            2,
+            person.Email,
+            "f62c84f98367cb3e942cfcf3d9961c990940c389de740563447a9db2cf7930dc",
+            "3063cbf1fc2a09c6394560551f89464064fb072a1854d72dfc3b8552be49a313",
+            1,
+            person.FirstName,
+            person.LastName,
+            person.Phone,
+            person.Address.ZipCode,
+            "The netherlands",
+            person.Address.City,
+            person.DateOfBirth,
+            faker.Image.PicsumUrl(300, 300)
+        );
+        Console.WriteLine("Email of test user 1: " + person.Email + "\n");
+        
+        faker = new Faker("nl");
+        person = faker.Person;
+
+        _database.ExecuteQuery(
+            "INSERT INTO user (role_id, email, password, salt, active, first_name, last_name, phone_number, postal_code, country, city, date_of_birth, profile_picture_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+            2,
+            person.Email,
+            "f62c84f98367cb3e942cfcf3d9961c990940c389de740563447a9db2cf7930dc",
+            "3063cbf1fc2a09c6394560551f89464064fb072a1854d72dfc3b8552be49a313",
+            1,
+            person.FirstName,
+            person.LastName,
+            person.Phone,
+            person.Address.ZipCode,
+            "The netherlands",
+            person.Address.City,
+            person.DateOfBirth,
+            faker.Image.PicsumUrl(300, 300)
+        );
+        Console.WriteLine("Email of test user 2: " + person.Email + "\n");
     }
 
     private void CreateTestUser(int roleId)
@@ -61,21 +107,21 @@ public class Factory : IFactory
         
         _database.ExecuteQuery(
             "INSERT INTO collaborative_space_user (user_id, collaborative_space_id, is_creator) VALUES (?, ?, ?),(?, ?, ?);",
-            5, 1, false,
-            8, 1, false
+            4, 1, false,
+            5, 1, false
         );
         
         _database.ExecuteQuery(
             "INSERT INTO collaborative_space_message (user_id, collaborative_space_id, message, is_active, created_at) VALUES (?, ?, ?, ?, ?),(?, ?, ?, ?, ?),(?, ?, ?, ?, ?),(?, ?, ?, ?, ?),(?, ?, ?, ?, ?),(?, ?, ?, ?, ?),(?, ?, ?, ?, ?),(?, ?, ?, ?, ?);",
+            4, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
             5, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
-            8, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
+            4, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
             5, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
-            8, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
-            8, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
             5, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
-            8, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
+            4, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
             5, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
-            5, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now
+            4, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now,
+            4, 1, new Faker("nl").Lorem.Sentence(), true, DateTime.Now
         );
     }
 }

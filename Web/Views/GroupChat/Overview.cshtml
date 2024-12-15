@@ -193,9 +193,13 @@
                     }
                 }
             </div>
-            <div class="chat-input">
-                <input id="chatInput" type="text" placeholder="Start typing to reply...">
-            </div>
+            @using (Html.BeginForm("SendMessage", "GroupChat", FormMethod.Post, new { id = "chatForm" }))
+            {
+                <div class="chat-input">
+                    <input type="hidden" name="groupChatId" value="@Model.Id"/>
+                    <input id="chatInput" type="text" name="message" placeholder="Start typing to reply...">
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -206,31 +210,18 @@
     $(document).ready(function() {
         var chatMessages = $(".chat-messages");
         chatMessages.scrollTop(chatMessages[0].scrollHeight);
+        $("#chatInput").focus();
     });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        var chatMessages = $(".chat-messages");
-        chatMessages.scrollTop(chatMessages[0].scrollHeight);
-
-        $("#chatInput").keypress(function(event) {
-            if (event.which === 13) {
+        $(document).ready(function () {
+        $("#chatInput").keypress(function (event) {
+            if (event.which === 13) {  
                 event.preventDefault();
                 var message = $(this).val();
                 if (message.trim() !== "") {
-                    $.ajax({
-                        url: '/GroupChat/Test',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({ text: message }),
-                        success: function(response) {
-                            $("#chatInput").val(""); 
-                        },
-                        error: function(error) {
-                            console.error("Error posting message:", error);
-                        }
-                    });
+                    $("#chatForm").submit();
                 }
             }
         });

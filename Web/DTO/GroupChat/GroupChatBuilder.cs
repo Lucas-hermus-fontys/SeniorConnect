@@ -62,9 +62,10 @@ namespace Web.DTO.GroupChat
             
             return new GroupChatDTO
             {
+                Id = collaborativeSpaces[0].Id,
                 User = userDTO,
                 Chats = chats,
-                Messages = messages
+                Messages = messages,
             };
         }
     }

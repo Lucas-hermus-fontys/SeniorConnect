@@ -3,7 +3,7 @@ using System.Data;
 using Domain.Interface;
 using MySql.Data.MySqlClient;
 
-namespace Infrastructure.Database;
+namespace Infrastructure.Database.Util;
 
 public class MySqlDatabaseCommand : IDatabaseCommand, IDisposable
 {
