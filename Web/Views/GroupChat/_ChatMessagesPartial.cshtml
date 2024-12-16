@@ -1,0 +1,13 @@
+@model Web.DTO.GroupChat.GroupChatDTO
+
+@if (Model.Messages.Any())
+{
+@foreach (var message in Model.Messages)
+{
+<div class="chat-message d-flex @((message.User.Id == Model.User.Id ? "flex-row-reverse" : ""))">
+    <img src="@(@message.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="">
+    <div class="message">@message.Text</div>
+    <div class="time">@message.Time</div>
+</div>
+}
+}

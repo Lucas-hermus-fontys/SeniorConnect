@@ -24,31 +24,47 @@ namespace Web.Controllers
         public IActionResult Overview()
         {
             string emailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
-            
+        
             if (string.IsNullOrEmpty(emailClaim))
             {
                 return Unauthorized();
             }
 
             User user = _userService.GetByEmail(emailClaim);
-            
+        
             List<CollaborativeSpace> groupChats = _groupChatService.GetGroupChatsByUserId(user.Id);
 
             return View(GroupChatBuilder.CreateFromParts(user, groupChats));
         }
 
-        [HttpPost]
         [Authorize]
+        [HttpPost]
         public IActionResult SendMessage([FromForm] string message, [FromForm] int groupChatId)
         {
             string emailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
-            
+        
             if (string.IsNullOrEmpty(emailClaim)) { return Unauthorized(); }
-            
+        
             User user = _userService.GetByEmail(emailClaim);
             _groupChatService.CreateMessage(user, message, groupChatId);
-            
-            return RedirectToAction("Overview"); 
+        
+            return PartialView("_ChatMessagesPartial", GroupChatBuilder.CreateMessagesFromParts(user, _groupChatService.GetGroupChatById(groupChatId)));
+        }
+ 
+        [Authorize]
+        [HttpGet]
+        public IActionResult LoadChatMessages(int groupChatId)
+        {
+            string emailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+        
+            if (string.IsNullOrEmpty(emailClaim))
+            {
+                return Unauthorized();
+            }
+        
+            User user = _userService.GetByEmail(emailClaim);
+        
+            return PartialView("_ChatMessagesPartial", GroupChatBuilder.CreateMessagesFromParts(user, _groupChatService.GetGroupChatById(groupChatId)));
         }
 
         public IActionResult Welcome()

@@ -28,6 +28,12 @@ public class GroupChatRepository : IGroupChatRepository
         return _database.ExecuteQueryAndMap<CollaborativeSpace>(query, new List<int> { userId });
     }
 
+    public CollaborativeSpace GetGroupChatById(int id)
+    {
+        string query = "SELECT * FROM collaborative_space WHERE `id` = ?";
+        return _database.ExecuteQueryAndMap<CollaborativeSpace>(query, new List<int> { id }).First();
+    }
+
     public List<CollaborativeSpaceMessage> GetGroupChatMessagesByGroupChatId(int groupChatId)
     {
         string query = "SELECT * FROM collaborative_space_message WHERE collaborative_space_id = ?";

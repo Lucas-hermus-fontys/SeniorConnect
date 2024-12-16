@@ -25,6 +25,16 @@ public class GroupChatService
         return groupChats;
     }
 
+    public CollaborativeSpace GetGroupChatById(int id)
+    {
+        CollaborativeSpace groupchat = _groupChatRepository.GetGroupChatById(id);
+        List<CollaborativeSpaceMessage> messages = _groupChatRepository.GetGroupChatMessagesByGroupChatId(groupchat.Id);
+        List<User> users = _groupChatRepository.GetUsersByGroupChatIds(new List<int> { groupchat.Id });
+        messages.ForEach(message => message.User = users.FirstOrDefault(user => user.Id == message.UserId));
+        groupchat.CollaborativeSpaceMessages = messages;
+        return groupchat;
+    }
+    
     public void CreateMessage(User user, string message, int groupChatId)
     {
         _groupChatRepository.CreateMessage(user.Id, message, groupChatId);

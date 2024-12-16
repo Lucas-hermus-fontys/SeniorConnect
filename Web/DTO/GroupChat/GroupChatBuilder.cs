@@ -68,5 +68,39 @@ namespace Web.DTO.GroupChat
                 Messages = messages,
             };
         }
+        public static GroupChatDTO CreateMessagesFromParts(User user, CollaborativeSpace groupChat)
+        {
+            List<ChatDTO> chats = new List<ChatDTO>();
+            List<MessageDTO> messages = new List<MessageDTO>();
+
+            UserDTO userDTO = new UserDTO
+            {
+                Id = user.Id,
+                DisplayName = user.FirstName + " " + user.LastName,
+                ProfileImageUrl = user.ProfilePictureUrl
+            };
+            
+            foreach (var spaceMessage in groupChat.CollaborativeSpaceMessages)
+            {
+                MessageDTO message = new MessageDTO();
+                message.Text = spaceMessage.Message;
+                message.User = new UserDTO
+                {
+                    Id = spaceMessage.User.Id,
+                    DisplayName = spaceMessage.User.FirstName + " " + spaceMessage.User.LastName,
+                    ProfileImageUrl = spaceMessage.User.ProfilePictureUrl
+                };
+                message.Time = spaceMessage.CreatedAt.ToString("HH:mm");
+                messages.Add(message);
+            }
+            
+            return new GroupChatDTO
+            {
+                Id = groupChat.Id,
+                User = userDTO,
+                Chats = chats,
+                Messages = messages,
+            };
+        }
     }
 }
