@@ -41,6 +41,9 @@ builder.Services.AddScoped<Factory>();
 builder.Services.AddScoped<IGroupChatRepository, GroupChatRepository>();
 builder.Services.AddScoped<GroupChatRepository>();
 builder.Services.AddScoped<GroupChatService>();
+builder.Services.AddScoped<IDiscussionFormRepository, DiscussionFormRepository>();
+builder.Services.AddScoped<DiscussionFormRepository>();
+builder.Services.AddScoped<DiscussionFormService>();
 
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
 BEGIN;
 SET
-    FOREIGN_KEY_CHECKS = 0;
+FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS user_interest;
 DROP TABLE IF EXISTS collaborative_space_message;
 DROP TABLE IF EXISTS collaborative_space_user;
@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS mentor_program;
 DROP TABLE IF EXISTS activity;
 DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS categories, work_categories, questions;
+DROP TABLE IF EXISTS categories, work_categories, questions, topic_keyword, collaborative_space_topic, topic;
 
 CREATE TABLE user_role
 (
@@ -191,7 +191,7 @@ CREATE TABLE work_categories
     work_id     int NOT NULL,
     category_id int NOT NULL,
     PRIMARY KEY (work_id, category_id),
-    KEY         category_id (category_id),
+    KEY category_id (category_id),
     FOREIGN KEY (work_id) REFERENCES volenteer_work (id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE
 );
@@ -202,11 +202,37 @@ CREATE TABLE questions
     text        varchar(500) NOT NULL,
     category_id int          NOT NULL,
     PRIMARY KEY (id),
-    KEY         category_id (category_id),
+    KEY category_id (category_id),
     CONSTRAINT questions_ibfk_1 FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE
 );
 
+-- Create topic table
+CREATE TABLE topic
+(
+    id   INTEGER AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255)
+);
 
-FOREIGN_KEY_CHECKS = 1;
+-- Create topic_keyword table
+CREATE TABLE topic_keyword
+(
+    id       INTEGER AUTO_INCREMENT PRIMARY KEY,
+    topic_id INTEGER,
+    name     VARCHAR(255),
+    weight   DOUBLE,
+    FOREIGN KEY (topic_id) REFERENCES topic (id)
+);
+
+-- Create collaborative_space_topic table
+CREATE TABLE collaborative_space_topic
+(
+    collaborative_space_id INTEGER,
+    topic_id               INTEGER,
+    PRIMARY KEY (collaborative_space_id, topic_id),
+    FOREIGN KEY (collaborative_space_id) REFERENCES collaborative_space (id),
+    FOREIGN KEY (topic_id) REFERENCES topic (id)
+);
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 COMMIT;

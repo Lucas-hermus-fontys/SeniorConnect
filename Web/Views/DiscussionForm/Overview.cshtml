@@ -1,7 +1,8 @@
+@using Web.DTO.DiscussionForm
+@model Web.DTO.DiscussionForm.DiscussionFormDTO
 @{
-Layout = null;
+    Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,80 +58,188 @@ Layout = null;
             border-radius: 5px;
             padding: 10px;
             flex-grow: 1;
+            position: relative;
+        }
+        .nested-comment {
+            margin-left: 50px;
+            border-left: 2px solid #dee2e6;
+            padding-left: 10px;
+        }
+        .nested-comment::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -2px;
+            bottom: 0;
+            width: 2px;
+            background-color: #dee2e6;
+        }
+        .reply-input {
+            display: none;
+            margin-top: 10px;
+        }
+        .collapse {
+            display: none;
+        }
+        .collapse.show {
+            display: block;
+        }
+        .collapse-btn {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .form-control {
+            width: 250px;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
-<div class="container mt-4">
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search for topics and discussions">
-    </div>
+<nav class="navbar">
+    <div class="container-fluid">
+        <input type="text" class="form-control" placeholder="Search">
+        <div class="ml-auto d-flex align-items-center">
+            <i class="ml-3 far fa-bell"></i>
+            <i class="ml-3 far fa-envelope"></i>
 
-    <!-- First Post -->
-    <div class="card post-card">
-        <div class="card-body">
-            <div class="post-header">
-                <img src="https://via.placeholder.com/40" alt="Keerthi's profile picture">
-                <div>
-                    <strong>Keerthi</strong>
-                    <small class="text-muted">4 days ago</small>
+            <!-- Profile Dropdown -->
+            <div class="dropdown ml-3">
+                <button class="btn btn-link dropdown-toggle" type="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="@(@Model.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="" class="ml-2 profile-pic">
+                    <span class="ml-3">@Model.User.DisplayName</span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                    <a class="dropdown-item" href="#">Profiel</a>
+                    <a class="dropdown-item" href="/auth/Sign_out">Uitloggen</a> <!-- Replace with your actual sign-out link -->
                 </div>
-            </div>
-            <div class="post-body">
-                Lorem ipsum dolor sit
-            </div>
-            <div class="post-footer">
-                <button class="btn btn-outline-primary btn-sm">23</button>
-                <button class="btn btn-outline-secondary btn-sm">0</button>
-                <button class="btn btn-outline-secondary btn-sm">...</button>
             </div>
         </div>
     </div>
+</nav>
+<div class="container mt-4">
+<div class="form-group">
+    <input type="text" class="form-control" placeholder="Search for topics and discussions">
+</div>
 
-    <!-- Second Post -->
+
+@foreach (FormDTO form in Model.Forms)
+{
     <div class="card post-card">
         <div class="card-body">
             <div class="post-header">
-                <img src="https://via.placeholder.com/40" alt="Pascal's profile picture">
+                <img src="@(form.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="">
                 <div>
-                    <strong>Pascal</strong>
-                    <small class="text-muted">5 days ago</small>
+                    <strong>@form.User.DisplayName</strong>
+                    <small class="text-muted">@form.DateTime</small>
                 </div>
             </div>
             <div class="post-body">
-                quisquam magnam ad quia omnis et enim offic
-            </div>
-            <div class="post-footer">
-                <button class="btn btn-outline-primary btn-sm">48</button>
-                <button class="btn btn-outline-secondary btn-sm">21</button>
-                <button class="btn btn-outline-secondary btn-sm">...</button>
+                <h5>@form.Title</h5>
+                <p>@form.Description</p>
             </div>
 
-            <!-- Comments Section -->
-            <div class="comment-section">
-                <div class="comment-header">
-                    <strong>21 Comments</strong>
+            @* comment section *@
+        </div>
+    </div>
+}
+
+
+@* ------------------------------------------------------------------------------- *@
+
+<!-- First Post -->
+<div class="card post-card">
+    <div class="card-body">
+        <div class="post-header">
+            <img src="https://via.placeholder.com/40" alt="Keerthi's profile picture">
+            <div>
+                <strong>Keerthi</strong>
+                <small class="text-muted">4 days ago</small>
+            </div>
+        </div>
+        <div class="post-body">
+            <h5>Post Title: Sample Post 1</h5>
+            <p>This is the description for the first post. It can include more detailed information, discussion points, or any relevant content about the topic.</p>
+        </div>
+        <div class="post-footer">
+            <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(1)">Reply</button>
+            <div id="reply-input-1" class="reply-input w-100">
+                <textarea class="form-control" placeholder="Write your reply..."></textarea>
+                <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(1)">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card post-card">
+    <div class="card-body">
+        <div class="post-header">
+            <img src="https://via.placeholder.com/40" alt="Pascal's profile picture">
+            <div>
+                <strong>Pascal</strong>
+                <small class="text-muted">5 days ago</small>
+            </div>
+        </div>
+        <div class="post-body">
+            <h5>Post Title: Sample Post 2</h5>
+            <p>This is the description for the second post. Here, you can explain the topic in more detail, providing context or asking for community feedback.</p>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comment-section">
+            <!-- First Comment -->
+            <div class="comment">
+                <img src="https://via.placeholder.com/40" alt="Thomas L.'s profile picture">
+                <div class="comment-body">
                     <div>
-                        <button class="btn btn-link p-0">Top comments</button>
-                        <button class="btn btn-link p-0">Newest first</button>
+                        <strong>Thomas L.</strong> <span class="badge badge-success">Best Answer</span>
+                        <small class="text-muted">2d</small>
+                    </div>
+                    Ut nihil magni id nulla officiis qui similique quasi et culpa corporis aut eveniet iste. Sed fugiat nostrum est molesti
+                    <div class="mt-2">
+                        <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(2)">Reply</button>
+                        <div id="reply-input-2" class="reply-input">
+                            <textarea class="form-control" placeholder="Write your reply..."></textarea>
+                            <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(2)">Submit</button>
+                        </div>
                     </div>
                 </div>
-                <!-- Comment 1 -->
+            </div>
+
+
+            <!-- Collapsible Comments -->
+            <div id="comment-collapse-1" class="collapse">
+
                 <div class="comment">
                     <img src="https://via.placeholder.com/40" alt="Thomas L.'s profile picture">
                     <div class="comment-body">
                         <div>
-                            <strong>Thomas L.</strong> <span class="badge badge-success">Best Answer</span>
                             <small class="text-muted">2d</small>
                         </div>
                         Ut nihil magni id nulla officiis qui similique quasi et culpa corporis aut eveniet iste. Sed fugiat nostrum est molesti
                         <div class="mt-2">
-                            <button class="btn btn-outline-primary btn-sm">12</button>
-                            <button class="btn btn-outline-secondary btn-sm">4</button>
-                            <button class="btn btn-outline-secondary btn-sm">Reply</button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(2)">Reply</button>
+                            <div id="reply-input-2" class="reply-input">
+                                <textarea class="form-control" placeholder="Write your reply..."></textarea>
+                                <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(2)">Submit</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Comment 2 -->
                 <div class="comment">
@@ -141,18 +250,133 @@ Layout = null;
                         </div>
                         Ut nihil magni id nulla officiis qui similique quasi et culpa corporis aut eveniet iste. Sed fugiat nostrum est molesti
                         <div class="mt-2">
-                            <button class="btn btn-outline-primary btn-sm">43</button>
-                            <button class="btn btn-outline-secondary btn-sm">12</button>
-                            <button class="btn btn-outline-secondary btn-sm">Reply</button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(3)">Reply</button>
+                            <div id="reply-input-3" class="reply-input">
+                                <textarea class="form-control" placeholder="Write your reply..."></textarea>
+                                <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(3)">Submit</button>
+                            </div>
                         </div>
+
+                        <!-- Nested Comment Layer 1 -->
+                        <div class="comment nested-comment">
+                            <img src="https://via.placeholder.com/40" alt="Jane's profile picture">
+                            <div class="comment-body">
+                                <div>
+                                    <strong>Jane</strong> <small class="text-muted">1d</small>
+                                </div>
+                                I agree with Pascal's point. The explanation provided is very clear and helpful.
+                                <div class="mt-2">
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(4)">Reply</button>
+                                    <div id="reply-input-4" class="reply-input">
+                                        <textarea class="form-control" placeholder="Write your reply..."></textarea>
+                                        <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(4)">Submit</button>
+                                    </div>
+                                </div>
+
+                                <!-- Nested Comment Layer 2 -->
+                                <div class="comment nested-comment">
+                                    <img src="https://via.placeholder.com/40" alt="Mike's profile picture">
+                                    <div class="comment-body">
+                                        <div>
+                                            <strong>Mike</strong> <small class="text-muted">12h</small>
+                                        </div>
+                                        Jane, I see your point, but I think there's more to consider.
+                                        <div class="mt-2">
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(5)">Reply</button>
+                                            <div id="reply-input-5" class="reply-input">
+                                                <textarea class="form-control" placeholder="Write your reply..."></textarea>
+                                                <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(5)">Submit</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Nested Comment Layer 3 -->
+                                        <div class="comment nested-comment">
+                                            <img src="https://via.placeholder.com/40" alt="Anna's profile picture">
+                                            <div class="comment-body">
+                                                <div>
+                                                    <strong>Anna</strong> <small class="text-muted">6h</small>
+                                                </div>
+                                                Mike, can you elaborate on that point?
+                                                <div class="mt-2">
+                                                    <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(6)">Reply</button>
+                                                    <div id="reply-input-6" class="reply-input">
+                                                        <textarea class="form-control" placeholder="Write your reply..."></textarea>
+                                                        <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(6)">Submit</button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Nested Comment Layer 4 -->
+                                                <div class="comment nested-comment">
+                                                    <img src="https://via.placeholder.com/40" alt="John's profile picture">
+                                                    <div class="comment-body">
+                                                        <div>
+                                                            <strong>John</strong> <small class="text-muted">1h</small>
+                                                        </div>
+                                                        Anna, I believe Mike was referring to the broader context of the topic.
+                                                        <div class="mt-2">
+                                                            <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(7)">Reply</button>
+                                                            <div id="reply-input-7" class="reply-input">
+                                                                <textarea class="form-control" placeholder="Write your reply..."></textarea>
+                                                                <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(7)">Submit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
+            <div class="collapse-btn" onclick="toggleCommentCollapse(1)">Show more comments</div>
         </div>
     </div>
 </div>
 
+
+</div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function toggleReplyInput(commentId) {
+        var replyInput = document.getElementById('reply-input-' + commentId);
+        if (replyInput.style.display === 'none' || replyInput.style.display === '') {
+            replyInput.style.display = 'block';
+        } else {
+            replyInput.style.display = 'none';
+        }
+    }
+
+    function submitReply(commentId) {
+        var replyText = document.querySelector('#reply-input-' + commentId + ' textarea').value;
+        if (replyText) {
+            alert('Your reply: ' + replyText);
+            document.querySelector('#reply-input-' + commentId + ' textarea').value = ''; // Clear the textarea after submission
+            document.getElementById('reply-input-' + commentId).style.display = 'none'; // Hide the reply input
+        } else {
+            alert('Please write a reply before submitting.');
+        }
+    }
+
+    function toggleCommentCollapse(postId) {
+        var collapseDiv = document.getElementById('comment-collapse-' + postId);
+        if (collapseDiv.classList.contains('show')) {
+            collapseDiv.classList.remove('show');
+            event.target.textContent = 'Show more comments';
+        } else {
+            collapseDiv.classList.add('show');
+            event.target.textContent = 'Hide comments';
+        }
+    }
+</script>
 </body>
 </html>

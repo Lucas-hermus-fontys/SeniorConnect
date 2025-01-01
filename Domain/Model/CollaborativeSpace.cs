@@ -16,4 +16,6 @@ public class CollaborativeSpace
     public List<CollaborativeSpaceMessage> CollaborativeSpaceMessages { get; set; } = new List<CollaborativeSpaceMessage>();
     
     public List<User> CollaborativeSpaceUsers { get; set; } = new List<User>();
+    
+    public User Creator { get; set; }
 }

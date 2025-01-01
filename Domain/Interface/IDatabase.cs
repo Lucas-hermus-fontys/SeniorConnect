@@ -10,5 +10,6 @@ namespace Domain.Interface
         public List<T> ExecuteQueryAndMap<T>(string query, List<object> parameters) where T : new();
 
         public List<T> ExecuteQueryAndMap<T>(string query, List<int> parameters) where T : new();
+        public List<T> ExecuteQueryAndMap<T>(string query) where T : new();
     }
 }

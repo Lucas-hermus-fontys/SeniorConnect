@@ -26,4 +26,6 @@ public class User
     public DateTime UpdatedAt { get; set; }
     public int CollaborativeSpaceId { get; set; }
     
+    public int CollaborativeSpaceMessageId { get; set; }
+    
 }

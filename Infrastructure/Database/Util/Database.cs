@@ -102,6 +102,11 @@ namespace Infrastructure.Database.Util
     
             return ExecuteQueryAndMap<T>(query, objectParameters);
         }
+
+        public List<T> ExecuteQueryAndMap<T>(string query) where T : new()
+        {
+            return ExecuteQueryAndMap<T>(query, new List<object>());
+        }
         
         private T MapToObject<T>(IDataRecord record) where T : new()
         {

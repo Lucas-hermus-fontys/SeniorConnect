@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Domain.Interface;
 using Domain.Model;
 using Domain.Util;
-using MySql.Data.MySqlClient;
 
 namespace Infrastructure.Database.Repository;
 
@@ -23,7 +21,7 @@ public class GroupChatRepository : IGroupChatRepository
         string query = @"SELECT * FROM collaborative_space_user 
                         INNER JOIN collaborative_space 
                         ON collaborative_space_user.collaborative_space_id = collaborative_space.id
-                        WHERE collaborative_space_user.user_id = ? AND type = 'CHAT'";
+                        WHERE collaborative_space_user.user_id = ? AND type = 'CHAT' AND is_active = true";
 
         return _database.ExecuteQueryAndMap<CollaborativeSpace>(query, new List<int> { userId });
     }
@@ -36,7 +34,7 @@ public class GroupChatRepository : IGroupChatRepository
 
     public List<CollaborativeSpaceMessage> GetGroupChatMessagesByGroupChatId(int groupChatId)
     {
-        string query = "SELECT * FROM collaborative_space_message WHERE collaborative_space_id = ?";
+        string query = "SELECT * FROM collaborative_space_message WHERE collaborative_space_id = ? AND is_active = true";
         return _database.ExecuteQueryAndMap<CollaborativeSpaceMessage>(query, new List<int> { groupChatId });
     }
 

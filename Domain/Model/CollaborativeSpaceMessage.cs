@@ -11,6 +11,6 @@ public class CollaborativeSpaceMessage
     public String ImageUrl { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    
     public User User { get; set; }
+    public List<CollaborativeSpaceMessage> ChildMessages { get; set; }
 }
