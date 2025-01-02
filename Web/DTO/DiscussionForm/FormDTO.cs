@@ -3,7 +3,8 @@ namespace Web.DTO.DiscussionForm;
 public class FormDTO
 {
     public UserDTO User { get; set; }
-    public String DateTime { get; set; }
+    public int Id { get; set; }
+    public String DisplayDate { get; set; }
     public String Title { get; set; }
     public String Description { get; set; }
     

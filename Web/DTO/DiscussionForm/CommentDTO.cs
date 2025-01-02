@@ -2,7 +2,9 @@ namespace Web.DTO.DiscussionForm;
 
 public class CommentDTO
 {
-    String Message { get; set; }
-    String Datetime { get; set; }
-    UserDTO User { get; set; }
+    public int Id { get; set; }
+    public String Message { get; set; }
+    public UserDTO User { get; set; }
+    public String DisplayDate { get; set; }
+    public List<CommentDTO> Comments { get; set; }
 }

@@ -45,7 +45,7 @@
         }
         .comment {
             display: flex;
-            margin-bottom: 10px;
+            /*margin-bottom: 10px;*/
         }
         .comment img {
             border-radius: 50%;
@@ -134,7 +134,6 @@
     <input type="text" class="form-control" placeholder="Search for topics and discussions">
 </div>
 
-
 @foreach (FormDTO form in Model.Forms)
 {
     <div class="card post-card">
@@ -143,7 +142,7 @@
                 <img src="@(form.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="">
                 <div>
                     <strong>@form.User.DisplayName</strong>
-                    <small class="text-muted">@form.DateTime</small>
+                    <small class="text-muted">@form.DisplayDate</small>
                 </div>
             </div>
             <div class="post-body">
@@ -151,7 +150,29 @@
                 <p>@form.Description</p>
             </div>
 
-            @* comment section *@
+            <div class="comment-section">
+
+
+
+                @if (form.Comments.Any())
+                {
+                    @Html.Partial("_CommentPartial", form.Comments.First())
+                }
+
+                <!-- Collapsible Comments -->
+
+                <div id="comment-collapse-@form.Id" class="collapse">
+
+                    @foreach (CommentDTO comment in form.Comments.Skip(1))
+                    {
+                        @Html.Partial("_CommentPartial", comment)
+                    }
+                </div>
+                @if (form.Comments.Count > 1)
+                {
+                    <div class="collapse-btn" onclick="toggleCommentCollapse(@form.Id)">Meer reacties weergeven</div>
+                }
+            </div>
         </div>
     </div>
 }
@@ -163,7 +184,7 @@
 <div class="card post-card">
     <div class="card-body">
         <div class="post-header">
-            <img src="https://via.placeholder.com/40" alt="Keerthi's profile picture">
+            <img src="https://via.placeholder.com/40" alt="">
             <div>
                 <strong>Keerthi</strong>
                 <small class="text-muted">4 days ago</small>
@@ -187,7 +208,7 @@
 <div class="card post-card">
     <div class="card-body">
         <div class="post-header">
-            <img src="https://via.placeholder.com/40" alt="Pascal's profile picture">
+            <img src="https://via.placeholder.com/40" alt="">
             <div>
                 <strong>Pascal</strong>
                 <small class="text-muted">5 days ago</small>
@@ -202,7 +223,7 @@
         <div class="comment-section">
             <!-- First Comment -->
             <div class="comment">
-                <img src="https://via.placeholder.com/40" alt="Thomas L.'s profile picture">
+                <img src="https://via.placeholder.com/40" alt="">
                 <div class="comment-body">
                     <div>
                         <strong>Thomas L.</strong> <span class="badge badge-success">Best Answer</span>
@@ -224,7 +245,7 @@
             <div id="comment-collapse-1" class="collapse">
 
                 <div class="comment">
-                    <img src="https://via.placeholder.com/40" alt="Thomas L.'s profile picture">
+                    <img src="https://via.placeholder.com/40" alt="">
                     <div class="comment-body">
                         <div>
                             <small class="text-muted">2d</small>
@@ -243,7 +264,7 @@
 
                 <!-- Comment 2 -->
                 <div class="comment">
-                    <img src="https://via.placeholder.com/40" alt="Pascal's profile picture">
+                    <img src="https://via.placeholder.com/40" alt="">
                     <div class="comment-body">
                         <div>
                             <strong>Pascal</strong> <small class="text-muted">4d</small>
@@ -259,7 +280,7 @@
 
                         <!-- Nested Comment Layer 1 -->
                         <div class="comment nested-comment">
-                            <img src="https://via.placeholder.com/40" alt="Jane's profile picture">
+                            <img src="https://via.placeholder.com/40" alt="">
                             <div class="comment-body">
                                 <div>
                                     <strong>Jane</strong> <small class="text-muted">1d</small>
@@ -275,7 +296,7 @@
 
                                 <!-- Nested Comment Layer 2 -->
                                 <div class="comment nested-comment">
-                                    <img src="https://via.placeholder.com/40" alt="Mike's profile picture">
+                                    <img src="https://via.placeholder.com/40" alt="">
                                     <div class="comment-body">
                                         <div>
                                             <strong>Mike</strong> <small class="text-muted">12h</small>
@@ -291,7 +312,7 @@
 
                                         <!-- Nested Comment Layer 3 -->
                                         <div class="comment nested-comment">
-                                            <img src="https://via.placeholder.com/40" alt="Anna's profile picture">
+                                            <img src="https://via.placeholder.com/40" alt="">
                                             <div class="comment-body">
                                                 <div>
                                                     <strong>Anna</strong> <small class="text-muted">6h</small>
@@ -307,7 +328,7 @@
 
                                                 <!-- Nested Comment Layer 4 -->
                                                 <div class="comment nested-comment">
-                                                    <img src="https://via.placeholder.com/40" alt="John's profile picture">
+                                                    <img src="https://via.placeholder.com/40" alt="">
                                                     <div class="comment-body">
                                                         <div>
                                                             <strong>John</strong> <small class="text-muted">1h</small>

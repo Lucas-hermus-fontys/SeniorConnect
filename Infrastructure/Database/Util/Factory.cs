@@ -348,7 +348,7 @@ public class Factory : IFactory
 
         _database.ExecuteQuery(
             "INSERT INTO collaborative_space (name, type, is_direct_message, is_active, description, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?);",
-            title, CollaborativeSpaceType.FORM.ToString(), false, true, body, DateTime.Now, null
+            title, CollaborativeSpaceType.FORM.ToString(), false, true, body, GenerateRandomDateWithinTwoWeeks(), null
         );
 
         int newId =
@@ -360,10 +360,10 @@ public class Factory : IFactory
         );
 
         int rng = new Random().Next(0, 5);
-        
+
         Console.WriteLine("----------------------------------------------------------------------------");
-        
-        
+
+
         for (int i = 0; i < rng; i++)
         {
             CreateRecursiveComments(newId, null);
@@ -375,41 +375,42 @@ public class Factory : IFactory
     {
         List<string> forumComments = new List<string>
         {
-            "I love this idea! I used to enjoy knitting scarves for everyone.",
-            "It’s so nice to read everyone’s stories. I feel like I’m getting to know you all.",
-            "I’ve been thinking a lot about my childhood lately. I remember when we used to gather around the fireplace, telling stories before bed. Those were the simple times.",
-            "The weather’s been a bit chilly lately. I try to bundle up with a warm cup of tea and watch the birds from my window. It’s the little things that bring joy.",
-            "Oh, I remember family picnics so well! My mom used to pack everything in baskets, and we’d spend the whole day by the lake. Those were the days when life was slower, and you didn’t need much to be happy.",
-            "I’ve been keeping myself busy with puzzles. I can’t do them as fast as I used to, but it’s a good way to pass the time and keep the mind sharp!",
-            "I can’t believe how fast time flies. I was just thinking about how much I miss the old family reunions. The laughter, the games, the food. Such wonderful memories!",
-            "The other day, I went through an old photo album. It brought back so many memories of when my children were little. I almost forgot how much joy they brought me. Now, they’re all grown up with families of their own. Time really does fly.",
-            "I miss the days when we would get together and play cards late into the night. Those were some of the happiest moments of my life. Maybe we should organize a game night here?",
-            "I’ve been staying busy by going for walks and enjoying the beauty of the garden. The fresh air always helps me clear my head.",
-            "I don’t do much knitting anymore, but I remember when I used to make blankets for everyone. It felt so good to create something with my hands. I wonder if I should start again.",
-            "What a lovely discussion! I’ve been thinking about how much joy can come from the smallest of things. The other day, I spent an afternoon reading old letters from my friends. It made me feel so connected to them again.",
-            "I used to love the old radio shows when I was younger. They were such a fun way to unwind. I wish we could have something like that again. Does anyone else miss those?",
-            "I have to say, it’s nice to hear everyone's memories. I’ve lived a full life, but sometimes it feels like it’s all just a blur. It’s only when I start talking about it that I realize how much I’ve experienced.",
-            "It’s so refreshing to hear from everyone. I feel like we are all part of a little community here, sharing our lives and memories. It’s comforting, especially on days when it feels quiet.",
-            "I’m not as quick as I used to be with my knitting, but I still enjoy it. There’s something so peaceful about it, just sitting with yarn and needles and letting my mind wander.",
-            "Do any of you enjoy writing letters? I used to write so many letters to my family when I was younger. It’s a nice way to stay in touch, even now.",
-            "I’ve been feeling nostalgic lately. I found some old letters from my childhood friends, and it made me smile to remember those carefree days. It’s nice to have those memories to look back on.",
-            "I’ve always loved gardening. Even though I don’t do it as much now, I still enjoy seeing the flowers bloom. The scent of fresh flowers is one of life’s little pleasures.",
-            "Life moves at such a different pace now. It’s funny, isn’t it? How everything slows down, but in a way, it’s nice. I enjoy the quiet moments more now than I ever did before.",
-            "I’ve been thinking a lot about the past lately, and how I wish I had written more down. There’s so much to remember, and sometimes it’s hard to keep track of it all. Maybe it’s never too late to start a journal?",
-            "I can’t believe how much has changed over the years. The world today is so different from when I was younger, but I try to focus on the positives. It’s comforting to know that we’re all here for each other.",
-            "I miss the good old days when we could all gather together, play games, and just enjoy each other’s company. There was always so much laughter. I wish we could do that again.",
-            "My daughter came by yesterday to visit. We spent the afternoon talking about family history and going through old albums. It was such a nice afternoon. It reminded me of how important family is.",
-            "I remember when I used to bake every Sunday. My kitchen always smelled of fresh bread and cookies. I miss that smell, and I miss the family being there. Maybe I’ll try baking again soon.",
-            "I always feel a little better after spending time in the garden. It’s so peaceful, just watching the flowers grow and listening to the birds. It makes everything feel right again.",
-            "I know what you mean. I used to have a big vegetable garden, but now I just enjoy watching the flowers in the courtyard. It’s still a little bit of nature, and it always brightens my day.",
-            "The little things in life have become more important as I’ve gotten older. A warm cup of tea, a good book, and a chat with a friend – these things bring so much happiness. It’s comforting to know we all appreciate these simple joys.",
-            "I’m always so impressed by how strong and resilient everyone is here. Life hasn’t always been easy, but we’re all here supporting each other, and that makes all the difference.",
-            "I’ve been meaning to pick up some new hobbies. Maybe I should try painting or drawing. I used to enjoy art when I was younger. It would be nice to start again.",
-            "I’ve been thinking about all the wonderful trips I’ve taken in my life. There was one trip to the beach that stands out – it was just the perfect day. I think I’ll try to find the pictures and share them here.",
-            "I’ve heard that taking up new hobbies helps keep the mind sharp. I might start doing more puzzles. I used to love doing them with my kids.",
-            "Sometimes I look back on my life, and I’m amazed at how much I’ve learned. It’s funny, the older you get, the more you realize that you never stop learning.",
-            "I’ve been thinking about how life is like a series of little moments. It’s those small, quiet moments that really shape our memories, and they’re the ones we hold on to.",
+            "Ik hou van dit idee! Vroeger breide ik graag sjaals voor iedereen.",
+            "Het is zo fijn om de verhalen van iedereen te lezen. Ik voel me alsof ik jullie allemaal leer kennen.",
+            "Ik heb de laatste tijd veel nagedacht over mijn kindertijd. Ik herinner me nog dat we altijd bij de open haard zaten, verhalen vertelden voor het slapen gaan. Dat waren de simpele tijden.",
+            "Het weer is de laatste tijd een beetje koud. Ik probeer me warm in te pakken met een kop thee en kijk naar de vogels vanuit mijn raam. Het zijn de kleine dingen die vreugde brengen.",
+            "Oh, ik herinner me de familiepicknicks zo goed! Mijn moeder pakte altijd alles in manden, en we brachten de hele dag aan het meer door. Dat waren de dagen waarin het leven trager ging, en je had niet veel nodig om gelukkig te zijn.",
+            "Ik houd mezelf bezig met puzzels. Ik kan ze niet zo snel maken als vroeger, maar het is een goede manier om de tijd door te brengen en de geest scherp te houden!",
+            "Ik kan niet geloven hoe snel de tijd vliegt. Ik dacht net nog aan hoe ik de oude familie reunies mis. Het lachen, de spellen, het eten. Wat een geweldige herinneringen!",
+            "De andere dag doorbladerde ik een oud fotoalbum. Het bracht zoveel herinneringen terug van toen mijn kinderen nog klein waren. Ik was bijna vergeten hoeveel vreugde ze me gaven. Nu zijn ze allemaal volwassen met hun eigen gezinnen. De tijd vliegt echt.",
+            "Ik mis de dagen dat we samenkwamen en kaarten speelden tot diep in de nacht. Dat waren enkele van de gelukkigste momenten van mijn leven. Misschien moeten we hier een spelavond organiseren?",
+            "Ik ben bezig door wandelingen te maken en te genieten van de schoonheid van de tuin. De frisse lucht helpt altijd mijn hoofd te verhelderen.",
+            "Ik brei niet zoveel meer, maar ik herinner me nog dat ik dekens maakte voor iedereen. Het voelde zo goed om iets met mijn handen te creëren. Misschien moet ik weer beginnen.",
+            "Wat een leuke discussie! Ik heb de laatste tijd nagedacht over hoeveel vreugde de kleinste dingen kunnen brengen. De andere dag bracht ik een middag door met het lezen van oude brieven van mijn vrienden. Het maakte me zo verbonden met hen.",
+            "Ik hield vroeger zo van de oude radioshows toen ik jonger was. Het was zo’n leuke manier om tot rust te komen. Ik wou dat we zoiets weer hadden. Mis iemand anders die ook?",
+            "Ik moet zeggen dat het fijn is om ieders herinneringen te horen. Ik heb een vol leven gehad, maar soms voelt het alsof alles slechts een vage herinnering is. Pas als ik erover begin te praten, realiseer ik me hoeveel ik heb ervaren.",
+            "Het is zo verfrissend om van iedereen te horen. Ik voel me alsof we allemaal deel uitmaken van een kleine gemeenschap hier, waarin we onze levens en herinneringen delen. Het is geruststellend, vooral op dagen waarop het stil lijkt.",
+            "Ik ben niet zo snel meer met mijn breien, maar ik geniet er nog steeds van. Er is iets zo vredigs aan breien, gewoon zitten met garen en naalden en mijn gedachten laten afdwalen.",
+            "Geniet iemand van het schrijven van brieven? Vroeger schreef ik zoveel brieven naar mijn familie toen ik jonger was. Het is een fijne manier om in contact te blijven, zelfs nu.",
+            "Ik voel me de laatste tijd nostalgisch. Ik vond enkele oude brieven van mijn kindervrienden, en het deed me glimlachen om die zorgeloze dagen te herinneren. Het is fijn om die herinneringen te hebben om op terug te kijken.",
+            "Ik heb altijd van tuinieren gehouden. Ook al doe ik het nu minder, ik geniet nog steeds van het zien van de bloemen bloeien. De geur van verse bloemen is een van de kleine geneugten van het leven.",
+            "Het leven beweegt zich nu op een heel ander tempo. Het is grappig, niet? Hoe alles vertraagt, maar op een manier is het fijn. Ik geniet nu meer van de stille momenten dan ooit tevoren.",
+            "Ik heb de laatste tijd veel nagedacht over het verleden, en hoe ik vaker dingen had moeten opschrijven. Er is zoveel te herinneren, en soms is het moeilijk om alles bij te houden. Misschien is het nooit te laat om een dagboek te beginnen?",
+            "Ik kan niet geloven hoeveel er veranderd is door de jaren heen. De wereld van vandaag is zo anders dan toen ik jonger was, maar ik probeer me te concentreren op de positieve dingen. Het is geruststellend te weten dat we er allemaal voor elkaar zijn.",
+            "Ik mis de goede oude tijd toen we allemaal samen konden komen, spelletjes spelen, en gewoon genieten van elkaars gezelschap. Er was altijd zoveel lachen. Ik wou dat we dat weer konden doen.",
+            "Mijn dochter kwam gisteren langs op bezoek. We brachten de middag door met praten over de familiegeschiedenis en door oude albums te bladeren. Het was zo’n fijne middag. Het herinnerde me eraan hoe belangrijk familie is.",
+            "Ik herinner me nog dat ik elke zondag bakte. Mijn keuken rook altijd naar vers brood en koekjes. Ik mis die geur, en ik mis de familie die daar was. Misschien ga ik weer eens bakken.",
+            "Ik voel me altijd een beetje beter na tijd doorbrengen in de tuin. Het is zo vredig, gewoon kijken naar de bloemen die groeien en luisteren naar de vogels. Het maakt alles weer goed.",
+            "Ik weet wat je bedoelt. Ik had vroeger een grote groentetuin, maar nu geniet ik gewoon van de bloemen in de binnenplaats. Het is nog steeds een beetje natuur, en het maakt mijn dag altijd beter.",
+            "De kleine dingen in het leven zijn belangrijker geworden naarmate ik ouder ben. Een warme kop thee, een goed boek, en een gesprek met een vriend – deze dingen brengen zoveel geluk. Het is geruststellend te weten dat we allemaal deze simpele vreugden waarderen.",
+            "Ik ben altijd zo onder de indruk van hoe sterk en veerkrachtig iedereen hier is. Het leven is niet altijd makkelijk geweest, maar we zijn hier allemaal elkaar aan het steunen, en dat maakt het verschil.",
+            "Ik ben van plan om nieuwe hobby’s op te pakken. Misschien moet ik schilderen of tekenen proberen. Ik genoot van kunst toen ik jonger was. Het zou fijn zijn om weer te beginnen.",
+            "Ik heb nagedacht over alle geweldige reizen die ik in mijn leven heb gemaakt. Er was één reis naar het strand die opvalt – het was gewoon de perfecte dag. Ik denk dat ik de foto’s ga zoeken en ze hier delen.",
+            "Ik heb gehoord dat het oppakken van nieuwe hobby’s helpt om de geest scherp te houden. Misschien ga ik meer puzzels doen. Ik hield ervan om ze vroeger te doen met mijn kinderen.",
+            "Soms kijk ik terug op mijn leven, en ik ben verbaasd over hoeveel ik heb geleerd. Het is grappig, hoe ouder je wordt, hoe meer je realiseert dat je nooit stopt met leren.",
+            "Ik heb nagedacht over hoe het leven een reeks kleine momenten is. Het zijn die kleine, stille momenten die onze herinneringen echt vormen, en dat zijn de momenten die we vasthouden.",
         };
+
 
         CreateTestComment(forumComments[new Random().Next(forumComments.Count)], spaceId, parentId);
 
@@ -417,13 +418,15 @@ public class Factory : IFactory
         {
             CreateRecursiveComments(spaceId, parentId, depth + 0.01);
         }
-        
+
         if (new Random().NextDouble() > 0.3)
         {
             return;
         }
 
-        int newParentId = (int)_database.ExecuteQuery("SELECT id FROM collaborative_space_message ORDER BY ID DESC LIMIT 1;").Rows[0]["id"];
+        int newParentId =
+            (int)_database.ExecuteQuery("SELECT id FROM collaborative_space_message ORDER BY ID DESC LIMIT 1;")
+                .Rows[0]["id"];
 
         CreateRecursiveComments(spaceId, newParentId.ToString());
     }
@@ -435,7 +438,19 @@ public class Factory : IFactory
 
         _database.ExecuteQuery(
             "INSERT INTO collaborative_space_message (user_id, parent_id, collaborative_space_id, message, is_active, created_at) VALUES (?, ?, ?, ?, ?, ?);",
-            random.Next(4, 36), parentId, space_id, message, true, DateTime.Now
+            random.Next(4, 36), parentId, space_id, message, true, GenerateRandomDateWithinTwoWeeks()
         );
+    }
+
+
+    public static DateTime GenerateRandomDateWithinTwoWeeks()
+    {
+        Random random = new Random();
+        double randomFactor = random.NextDouble();
+        double adjustedFactor = Math.Pow(randomFactor, 2);
+        double totalMinutesInTwoWeeks = TimeSpan.FromDays(14).TotalMinutes;
+        double randomMinutes = adjustedFactor * totalMinutesInTwoWeeks;
+        DateTime randomDate = DateTime.Now.AddMinutes(-1 * (int)randomMinutes);
+        return randomDate;
     }
 }

@@ -1,0 +1,29 @@
+@model Web.DTO.DiscussionForm.CommentDTO
+
+<div class="comment" id="comment-@Model.Id">
+    <img src="@(Model.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="">
+    <div class="comment-body">
+        <div>
+            <strong>@Model.User.DisplayName</strong> <small class="text-muted">@Model.DisplayDate</small>
+        </div>
+        @Model.Message
+        <div class="mt-2 mb-3">
+            <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(@Model.Id)">Beantwoorden</button>
+            <div id="reply-input-@Model.Id" class="reply-input">
+                <textarea class="form-control" placeholder="Schrijf een reactie"></textarea>
+                <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(@Model.Id)">Versturen</button>
+            </div>
+        </div>
+
+        <!-- Render nested comments (recursive) -->
+        @if (Model.Comments != null && Model.Comments.Any())
+        {
+            <div class="nested-comment">
+                @foreach (var nestedComment in Model.Comments)
+                {
+                    @Html.Partial("_CommentPartial", nestedComment)
+                }
+            </div>
+        }
+    </div>
+</div>
