@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Enum;
 using Domain.Interface;
 using Domain.Model;
 using Domain.Util;
+using Web.Models;
 
 namespace Infrastructure.Database.Repository;
 
@@ -29,7 +32,7 @@ public class DiscussionFormRepository : IDiscussionFormRepository
 
     public List<CollaborativeSpace> GetDiscussionForms()
     {
-        string query = @"SELECT * FROM collaborative_space WHERE type = 'FORM' AND is_active = true";
+        string query = @"SELECT * FROM collaborative_space WHERE type = 'FORM' AND is_active = true ORDER BY created_at desc";
         return _database.ExecuteQueryAndMap<CollaborativeSpace>(query);
     }
 
@@ -77,9 +80,24 @@ public class DiscussionFormRepository : IDiscussionFormRepository
                 JOIN collaborative_space_message csm
                 ON u.id = csm.user_id
                 WHERE csm.id IN ( " + ids.GeneratePlaceholderList() + " );";
-        
+
         return _database.ExecuteQueryAndMap<User>(query, ids);
     }
-    
-    
+
+    public void CreateDiscussionForm(User user, DiscussionFormCreateRequest request)
+    {
+        const string query = @"
+                INSERT INTO collaborative_space 
+                (name, type, is_direct_message, is_active, description, created_at, updated_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?);";
+        
+        _database.ExecuteQuery(query, request.Title, CollaborativeSpaceType.FORM.ToString(), false, true, request.Description, DateTime.Now, null);
+        
+        int newId = (int)_database.ExecuteQuery("SELECT * FROM collaborative_space ORDER BY ID DESC LIMIT 1;").Rows[0]["id"];
+        
+        _database.ExecuteQuery(
+            "INSERT INTO collaborative_space_user (user_id, collaborative_space_id, is_creator) VALUES (?, ?, ?);",
+            user.Id, newId, true
+        );
+    }
 }

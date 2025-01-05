@@ -2,7 +2,7 @@
 
 <div class="comment" id="comment-@Model.Id">
     <img src="@(Model.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="">
-    <div class="comment-body">
+    <div class="comment-body mb-2">
         <div>
             <strong>@Model.User.DisplayName</strong> <small class="text-muted">@Model.DisplayDate</small>
         </div>
@@ -18,12 +18,12 @@
         <!-- Render nested comments (recursive) -->
         @if (Model.Comments != null && Model.Comments.Any())
         {
-            <div class="nested-comment">
-                @foreach (var nestedComment in Model.Comments)
-                {
-                    @Html.Partial("_CommentPartial", nestedComment)
-                }
-            </div>
+        <div class="nested-comment">
+            @foreach (var nestedComment in Model.Comments)
+            {
+            <partial name="_CommentPartial" model="nestedComment" />
+            }
+        </div>
         }
     </div>
 </div>

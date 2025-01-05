@@ -416,7 +416,7 @@ public class Factory : IFactory
 
         if (new Random().NextDouble() > 0.5 + depth)
         {
-            CreateRecursiveComments(spaceId, parentId, depth + 0.01);
+            CreateRecursiveComments(spaceId, parentId, depth + 1);
         }
 
         if (new Random().NextDouble() > 0.3)

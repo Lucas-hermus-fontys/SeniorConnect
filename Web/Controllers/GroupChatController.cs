@@ -42,7 +42,6 @@ namespace Web.Controllers
         public IActionResult SendMessage([FromForm] string message, [FromForm] int groupChatId)
         {
             string emailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
-        
             if (string.IsNullOrEmpty(emailClaim)) { return Unauthorized(); }
         
             User user = _userService.GetByEmail(emailClaim);
