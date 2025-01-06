@@ -50,7 +50,7 @@ public class DiscussionFormAnalyzer
         return _topics.Where(t => relevantTopics.Contains(t.Id)).ToList();
     }
     
-    public void Validate()
+    private void Validate()
     {
         if (_discussionForm is null) 
         { 

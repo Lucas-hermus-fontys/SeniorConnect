@@ -11,10 +11,14 @@ public class DiscussionFormBuilder
     {
         
         List<FormDTO> forms = new List<FormDTO>();
-
-
+        
         foreach (CollaborativeSpace space in collaborativeSpaces)
         {
+            List<String> topics = new List<String>();
+            foreach (Topic topic in space.Topics)
+            {
+                topics.Add(topic.Name);
+            }
             FormDTO form = new FormDTO
             {
                 Id = space.Id,
@@ -27,7 +31,8 @@ public class DiscussionFormBuilder
                     DisplayName = space.Creator.FirstName + " " + space.Creator.LastName,
                     ProfileImageUrl = space.Creator.ProfilePictureUrl
                 },
-                Comments = BuildCommentsRecursive(space.CollaborativeSpaceMessages)
+                Comments = BuildCommentsRecursive(space.CollaborativeSpaceMessages),
+                Tags = topics
             };
 
             forms.Add(form);

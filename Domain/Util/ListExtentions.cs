@@ -4,7 +4,7 @@ public static class ListExtentions
 {
     public static string GeneratePlaceholderList(this List<int> values)
     {
-        if (values == null || values.Count == 0)
+        if (values == null || !values.Any())
         {
             return string.Empty;
         }

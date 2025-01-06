@@ -14,14 +14,13 @@
                 <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(@Model.Id)">Versturen</button>
             </div>
         </div>
-
-        <!-- Render nested comments (recursive) -->
+        
         @if (Model.Comments != null && Model.Comments.Any())
         {
         <div class="nested-comment">
             @foreach (var nestedComment in Model.Comments)
             {
-            <partial name="_CommentPartial" model="nestedComment" />
+                <partial name="_CommentPartial" model="nestedComment" />
             }
         </div>
         }

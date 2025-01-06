@@ -59,7 +59,7 @@ namespace Web.Controllers
                 try
                 {
                     _discussionFormService.CreateDiscussionFrom(user, request);
-                    TempData["SuccessMessage"] = "De registratie is succesvol";
+                    TempData["SuccessMessage"] = "We hebben uw Formulier toegevoegd aan onze collectie.";
                 }
                 catch (EmailAlreadyExistsException e)
                 {

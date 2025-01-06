@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Bogus;
+using Domain.Analysis;
 using Domain.Enum;
 using Domain.Interface;
+using Domain.Model;
+using Domain.Service;
 using Domain.Transformer;
 
 namespace Infrastructure.Database.Util;
@@ -11,10 +15,12 @@ namespace Infrastructure.Database.Util;
 public class Factory : IFactory
 {
     private readonly IDatabase _database;
+    private readonly DiscussionFormService _discussionFormService;
 
-    public Factory(IDatabase database)
+    public Factory(IDatabase database, DiscussionFormService discussionFormAnalyzer)
     {
         _database = database;
+        _discussionFormService = discussionFormAnalyzer;
     }
 
     public void PopulateTestData()
@@ -145,6 +151,7 @@ public class Factory : IFactory
             3, 0.9, "Technologie",
             3, 0.8, "Gadgets",
             3, 0.8, "Smartphones",
+            3, 0.8, "Smartphone",
             3, 0.7, "Tablets",
             3, 0.7, "Computers",
             3, 0.8, "Internet",
@@ -191,150 +198,87 @@ public class Factory : IFactory
         var discussionForms = new Dictionary<string, string>
         {
             {
-                "Heeft iemand ervaring met het gebruik van een rollator?",
-                "Ik heb onlangs een rollator aangeschaft omdat ik wat moeite heb met lopen. Heeft iemand anders tips over het gebruik van een rollator?"
+                "Energie houden na je 60ste?",
+                "Ik merk dat ik minder energie heb dan vroeger. Zijn er gewoonten of tips die je kunnen helpen om actiever en energieker te blijven, vooral als je ouder wordt?"
             },
             {
-                "Wie herinnert zich nog de oude televisies met draaiknoppen?",
-                "Ik zat laatst te denken aan de tijd toen je de tv moest afstemmen met een draaiknop. Wat vonden jullie daarvan?"
+                "Wat is de beste manier om een rollator te gebruiken?",
+                "Ik ben in de winkel geweest om naar een rollator te kijken, maar ik weet niet precies of en hoe ik die zou moeten gebruiken. Zijn er dingen waar je op moet letten of tips voor het gebruik?"
             },
             {
-                "Hoe houd ik mijn geheugen scherp naarmate ik ouder word?",
-                "Ik merk dat ik soms wat vergeetachtig ben. Heeft iemand tips om mijn geheugen te verbeteren?"
+                "Hoe kun je het beste sparen voor je pensioen?",
+                "Mijn pensioen komt steeds dichterbij, maar ik vraag me af of ik genoeg gespaard heb. Heeft iemand ervaring met pensioenplanning? Wat zou je nu anders doen als je terugkijkt?"
             },
             {
-                "Zijn er leuke spelletjes om te doen met mijn kleinkinderen?",
-                "Mijn kleinkinderen komen regelmatig op bezoek. Iemand tips voor leuke, eenvoudige spelletjes?"
+                "Tips voor een gebruiksvriendelijke smartphone?",
+                "Ik ben nieuw met smartphones en wil er graag meer mee doen. Welke apps of functies zijn handig voor mensen die niet zo technisch zijn, maar wel willen profiteren van de technologie?"
             },
             {
-                "Wat kan ik doen tegen koude voeten in de winter?",
-                "Ik heb altijd last van koude voeten in de winter. Heeft iemand een goede tip om ze warm te houden?"
+                "Wat helpt tegen ochtendstijfheid in de gewrichten?",
+                "Ik merk dat ik last krijg van stijfheid, vooral 's ochtends. Hebben anderen oefeningen of routines die helpen om de pijn te verminderen en de soepelheid te verbeteren?"
             },
             {
-                "Wie herinnert zich nog de goede oude tijden van de postbode?",
-                "Vroeger was de postbode altijd een vertrouwd gezicht. Wie heeft herinneringen aan die tijd?"
+                "Moet ik mijn pensioenfondsen diversifiëren?",
+                "Met de huidige economische veranderingen begin ik te twijfelen of mijn pensioenfondsen nog wel goed verdeeld zijn. Hebben anderen hun beleggingsstrategie aangepast naarmate ze dichter bij hun pensioen kwamen?"
             },
             {
-                "Hoe kan ik mijn tuin het beste onderhouden zonder veel te bukken?",
-                "Ik hou van tuinieren, maar bukken wordt moeilijker. Heeft iemand tips om mijn tuin goed te onderhouden?"
+                "Zijn er goede apps voor het beheren van je gezondheid?",
+                "Ik heb gehoord van apps die je helpen bij het bijhouden van je gezondheid, maar ik weet niet welke ik moet proberen. Gebruikt iemand van jullie een app voor gezondheid of fitheid die je zou aanraden?"
             },
             {
-                "Wat zijn goede manieren om in contact te blijven met familie?",
-                "Ik wil graag in contact blijven met mijn familie. Iemand tips voor eenvoudige manieren om te bellen of videobellen?"
+                "Hoe kan ik gezonder eten zonder veel moeite?",
+                "Ik wil gezonder eten, maar koken wordt steeds lastiger. Wat zijn makkelijke manieren om gezondere keuzes te maken, vooral als het gaat om voeding voor ouderen?"
             },
             {
-                "Wie heeft er nog een platenspeler?",
-                "Ik luister af en toe naar vinyl. Heeft iemand anders ook nog een platenspeler?"
+                "Hoe zorg je ervoor dat je financiële planning klopt?",
+                "Na mijn pensioen wil ik zeker weten dat ik mijn geld goed beheer. Hoe hebben jullie ervoor gezorgd dat je financiële situatie stabiel blijft, zelfs als je minder werkt?"
             },
             {
-                "Wat is een goed recept voor een lichte maaltijd als je minder eet?",
-                "Ik eet tegenwoordig wat minder. Heeft iemand een goed recept voor een lichte, voedzame maaltijd?"
+                "Hoe kunnen sociale media je humeur beïnvloeden?",
+                "Ik gebruik sociale media om in contact te blijven met familie, maar soms voel ik me er niet goed door. Heeft iemand gemerkt dat sociale media invloed heeft op je mentale gezondheid?"
             },
             {
-                "Wat zijn de voordelen van wandelen voor oudere mensen?",
-                "Ik probeer dagelijks een stukje te wandelen. Wat zijn de voordelen van wandelen op latere leeftijd?"
+                "Hoe veilig ben ik online?",
+                "Ik maak me zorgen over mijn online veiligheid. Ik ben niet zo technisch, dus ik weet niet goed wat ik moet doen om mezelf te beschermen. Heeft iemand tips om veilig online te blijven?"
             },
             {
-                "Wie heeft er ervaring met het gebruik van een medicijnwekker?",
-                "Ik vergeet soms mijn medicijnen. Heeft iemand ervaring met een medicijnwekker?"
+                "Wat zijn de beste manieren om in contact te blijven met vrienden?",
+                "Nu ik wat ouder ben, merk ik dat ik mijn vrienden niet zo vaak zie. Wat doen jullie om in contact te blijven, vooral als je niet altijd in de buurt bent?"
             },
             {
-                "Wat kan ik doen tegen pijn in mijn gewrichten?",
-                "Mijn gewrichten doen pijn, vooral in de winter. Heeft iemand tips voor verlichting?"
+                "Heeft iemand ervaring met het kiezen van een pensioenfonds?",
+                "Ik wil beginnen met het kiezen van een pensioenfonds, maar het is zo ingewikkeld. Heeft iemand ervaring met het maken van deze keuze? Wat zou je aanraden?"
             },
             {
-                "Zijn er nog gezellige activiteiten in de buurt voor ouderen?",
-                "Ik ben op zoek naar leuke activiteiten voor ouderen in de buurt. Iemand suggesties?"
+                "Beleggen in mijn pensioen: Is dat een goed idee?",
+                "Ik ben van plan om mijn pensioen wat meer te beleggen, maar ik ben niet zeker of het het juiste moment is. Heeft iemand ervaring met beleggen voor je pensioen?"
             },
             {
-                "Wie heeft er ervaring met het gebruik van een fiets met trapondersteuning?",
-                "Mijn kinderen raden een fiets met trapondersteuning aan. Heeft iemand ervaring hiermee?"
+                "Gezond blijven zonder zware oefeningen?",
+                "Ik wil graag in beweging blijven, maar zware oefeningen zijn niet meer zo makkelijk voor me. Wat zijn goede alternatieven die je kunnen helpen om fit te blijven?"
             },
             {
-                "Wat kan ik doen om mijn handen soepel te houden?",
-                "Mijn handen zijn vaak stijf. Heeft iemand tips om ze soepel te houden?"
+                "Wat kan ik doen tegen vergeetachtigheid?",
+                "Ik merk dat ik vaker dingen vergeet. Zijn er mentale oefeningen of strategieën die je helpen om je geheugen scherp te houden naarmate je ouder wordt?"
             },
             {
-                "Heeft iemand tips voor het verbeteren van mijn gehoor?",
-                "Ik heb gemerkt dat mijn gehoor de laatste tijd achteruit gaat. Heeft iemand suggesties voor hulpmiddelen of oefeningen?"
+                "Welke apps zijn nuttig voor boodschappen doen?",
+                "Zijn er apps die het makkelijker maken om boodschappen te doen zonder de deur uit te hoeven? Ik zou graag willen weten welke apps handig zijn om alles thuisbezorgd te krijgen."
             },
             {
-                "Wat zijn de beste manieren om mijn gewicht te beheersen?",
-                "Ik probeer gezonder te eten en wat kilo's kwijt te raken. Heeft iemand tips of ervaringen met gewichtsbeheersing?"
+                "Wat zijn goede routines om je gezondheid op peil te houden?",
+                "Ik ben op zoek naar een simpele dagelijkse routine die me helpt gezond te blijven. Wat zijn kleine veranderingen die je hebt doorgevoerd om gezonder te leven?"
             },
             {
-                "Wie herinnert zich nog de oude winkels in ons dorp?",
-                "Vroeger hadden we zoveel leuke winkels in ons dorp. Heeft iemand herinneringen aan de tijd dat deze winkels nog actief waren?"
+                "Sociale zekerheid en pensioen: Wat moet ik weten?",
+                "Ik hoor veel over sociale zekerheid, maar ik weet niet goed hoe dat samenwerkt met mijn pensioen. Kan iemand me uitleggen hoe sociale zekerheid mijn pensioen beïnvloedt?"
             },
             {
-                "Wat zijn jullie favoriete boeken om te lezen?",
-                "Ik lees graag, maar soms weet ik niet welk boek ik nu moet pakken. Heeft iemand een goed boek aan te bevelen?"
-            },
-            {
-                "Wat is een goed idee voor een hobby die niet veel inspanning vereist?",
-                "Ik ben op zoek naar een nieuwe hobby die niet te veel fysieke inspanning vereist. Iemand suggesties?"
-            },
-            {
-                "Hoe kan ik mijn sociale contacten onderhouden?",
-                "Nu mijn kinderen en vrienden verder weg wonen, vraag ik me af hoe ik mijn sociale contacten beter kan onderhouden. Heeft iemand tips?"
-            },
-            {
-                "Wat kan ik doen om mijn huis veilig te maken?",
-                "Ik wil mijn huis wat veiliger maken, vooral met betrekking tot struikelgevaar. Heeft iemand tips voor het verbeteren van de veiligheid?"
-            },
-            {
-                "Hoe kan ik de trap gemakkelijker opkomen?",
-                "De trap is voor mij een beetje een uitdaging geworden. Heeft iemand tips of hulpmiddelen die het makkelijker maken?"
-            },
-            {
-                "Wat is jullie favoriete manier om te ontspannen?",
-                "Na een lange dag zoek ik manieren om te ontspannen. Wat doen jullie om tot rust te komen?"
-            },
-            {
-                "Wie heeft er ervaring met meditatie voor ouderen?",
-                "Ik ben benieuwd of meditatie kan helpen om tot rust te komen. Heeft iemand ervaring met meditatie of ademhalingsoefeningen?"
-            },
-            {
-                "Wat kunnen we doen om te helpen bij het geheugenverlies?",
-                "Ik merk dat mijn geheugen niet meer is wat het was. Heeft iemand tips of technieken om het geheugen scherp te houden?"
-            },
-            {
-                "Wie heeft er ervaring met het gebruik van een tablet of smartphone?",
-                "Ik ben nieuw met een tablet en wil graag weten hoe ik het optimaal kan gebruiken. Heeft iemand hier ervaring mee?"
-            },
-            {
-                "Wat is een goed idee voor een lichte wandeling in de buurt?",
-                "Ik wil elke dag een wandeling maken, maar zoek een rustige route. Heeft iemand suggesties voor een goede wandelroute in de buurt?"
-            },
-            {
-                "Hoe kan ik mijn energie het hele dag door behouden?",
-                "Soms voel ik me uitgeput gedurende de dag. Heeft iemand tips om mijn energie beter te verdelen?"
-            },
-            {
-                "Wat is het beste voor je gezondheid: yoga of pilates?",
-                "Ik ben geïnteresseerd in het proberen van een van deze activiteiten, maar weet niet welke het beste is voor mijn gezondheid. Heeft iemand ervaring met yoga of pilates?"
-            },
-            {
-                "Wie heeft er ervaring met een verhoogd bed?",
-                "Mijn bed is de laatste tijd wat moeilijker om in en uit te komen. Heeft iemand ervaring met een verhoogd bed?"
-            },
-            {
-                "Wat kan ik doen om mijn huid gezond te houden?",
-                "Mijn huid lijkt droger te worden naarmate ik ouder word. Heeft iemand tips voor het behouden van een gezonde huid?"
-            },
-            {
-                "Wat is het beste om te doen tegen last van de knie?",
-                "Mijn knieën beginnen pijn te doen, vooral na een wandeling. Heeft iemand tips of oefeningen die helpen bij knieklachten?"
-            },
-            {
-                "Wie heeft er ervaring met het aanpassen van de verlichting in huis?",
-                "Ik merk dat het in huis vaak te donker is. Heeft iemand ervaring met het aanpassen van de verlichting, zoals het gebruik van dimmers of andere lampen?"
-            },
-            {
-                "Wat zijn goede manieren om actief te blijven zonder te veel te belasten?",
-                "Ik wil actief blijven zonder mijn lichaam teveel te belasten. Heeft iemand suggesties voor activiteiten die niet te zwaar zijn?"
+                "Oefeningen voor flexibiliteit en pijnverlichting",
+                "Hebben jullie specifieke oefeningen die je helpen om je flexibiliteit te behouden of pijn te verminderen? Vooral als je ouder wordt en meer last krijgt van stijfheid."
             }
         };
+
 
         foreach (var entry in discussionForms)
         {
@@ -368,6 +312,15 @@ public class Factory : IFactory
         {
             CreateRecursiveComments(newId, null);
             Console.WriteLine("Currently at i = " + i + " of : " + rng);
+        }
+
+        CollaborativeSpace discussionForm = _discussionFormService.GetDiscussionFormById(newId);
+        List<Topic> topics = _discussionFormService.GetTopics();
+        DiscussionFormAnalyzer analyzer = new DiscussionFormAnalyzer(discussionForm, topics);
+        List<Topic> relatedTopics = analyzer.GetTopicsFromContext();
+        if (relatedTopics.Any())
+        {
+            _discussionFormService.AddTopicsToDiscussionForm(discussionForm, relatedTopics);
         }
     }
 
@@ -431,7 +384,6 @@ public class Factory : IFactory
         CreateRecursiveComments(spaceId, newParentId.ToString());
     }
 
-
     private void CreateTestComment(string message, int space_id, string parentId = null)
     {
         Random random = new Random();
@@ -441,7 +393,6 @@ public class Factory : IFactory
             random.Next(4, 36), parentId, space_id, message, true, GenerateRandomDateWithinTwoWeeks()
         );
     }
-
 
     public static DateTime GenerateRandomDateWithinTwoWeeks()
     {
