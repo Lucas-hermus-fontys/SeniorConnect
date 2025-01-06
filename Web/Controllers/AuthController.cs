@@ -24,6 +24,11 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect(string.IsNullOrEmpty(returnUrl) ? "/groupchat/overview" : returnUrl);
+            }
+    
             ViewData["ReturnUrl"] = returnUrl;
             return View(new LoginModel());
         }
