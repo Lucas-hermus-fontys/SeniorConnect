@@ -76,4 +76,9 @@ public class DiscussionFormRepositoryMock : IDiscussionFormRepository
     public void AddKeyword(TopicKeyword keyword)
     {
     }
+
+    public void CreateComment(User user, DiscussionFormCommentCreateRequest request)
+    {
+        
+    }
 }

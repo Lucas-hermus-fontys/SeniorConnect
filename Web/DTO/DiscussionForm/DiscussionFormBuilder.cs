@@ -7,11 +7,36 @@ namespace Web.DTO.DiscussionForm;
 
 public class DiscussionFormBuilder
 {
+    public static FormDTO CreateFormFromParts(CollaborativeSpace space)
+    {
+        List<String> topics = new List<String>();
+        foreach (Topic topic in space.Topics)
+        {
+            topics.Add(topic.Name);
+        }
+        FormDTO form = new FormDTO
+        {
+            Id = space.Id,
+            DisplayDate = DateFormatter.FormatDifference(space.CreatedAt),
+            Description = space.Description,
+            Title = space.Name,
+            User = new UserDTO
+            {
+                Id = space.Creator.Id,
+                DisplayName = space.Creator.FirstName + " " + space.Creator.LastName,
+                ProfileImageUrl = space.Creator.ProfilePictureUrl
+            },
+            Comments = BuildCommentsRecursive(space.CollaborativeSpaceMessages, space.Id),
+            Tags = topics
+        };
+
+        return form;
+    }
+
     public static DiscussionFormDTO CreateFromParts(User user, List<CollaborativeSpace> collaborativeSpaces)
     {
-        
         List<FormDTO> forms = new List<FormDTO>();
-        
+
         foreach (CollaborativeSpace space in collaborativeSpaces)
         {
             List<String> topics = new List<String>();
@@ -31,28 +56,26 @@ public class DiscussionFormBuilder
                     DisplayName = space.Creator.FirstName + " " + space.Creator.LastName,
                     ProfileImageUrl = space.Creator.ProfilePictureUrl
                 },
-                Comments = BuildCommentsRecursive(space.CollaborativeSpaceMessages),
+                Comments = BuildCommentsRecursive(space.CollaborativeSpaceMessages, space.Id),
                 Tags = topics
             };
 
             forms.Add(form);
         }
-        
+
         return new DiscussionFormDTO
         {
-            
             User = new UserDTO
             {
                 Id = user.Id,
                 DisplayName = user.FirstName + " " + user.LastName,
                 ProfileImageUrl = user.ProfilePictureUrl
             },
-            
             Forms = forms
         };
     }
 
-    private static List<CommentDTO> BuildCommentsRecursive(List<CollaborativeSpaceMessage> messages, List<CommentDTO> commentDTOs)
+    private static List<CommentDTO> BuildCommentsRecursive(List<CollaborativeSpaceMessage> messages, int formId, List<CommentDTO> commentDTOs)
     {
         if (!messages.Any())
         {
@@ -72,17 +95,19 @@ public class DiscussionFormBuilder
                     DisplayName = message.User.FirstName + " " + message.User.LastName,
                     ProfileImageUrl = message.User.ProfilePictureUrl
                 },
-                Comments = BuildCommentsRecursive(message.ChildMessages)
+                Comments = BuildCommentsRecursive(message.ChildMessages, formId),
+                FormId = formId,
+                ParentId = message.ParentId
             };
-            
+
             commentDTOs.Add(commentDTO);
         }
-        
+
         return commentDTOs;
     }
 
-    private static List<CommentDTO> BuildCommentsRecursive(List<CollaborativeSpaceMessage> messages)
+    private static List<CommentDTO> BuildCommentsRecursive(List<CollaborativeSpaceMessage> messages, int formId)
     {
-        return BuildCommentsRecursive(messages, new List<CommentDTO>());
+        return BuildCommentsRecursive(messages, formId, new List<CommentDTO>());
     }
 }

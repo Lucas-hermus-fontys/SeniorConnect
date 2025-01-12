@@ -9,7 +9,7 @@ namespace Domain.Service;
 public class DiscussionFormService
 {
     private readonly IDiscussionFormRepository _discussionFormRepository;
-
+    
     public DiscussionFormService(IDiscussionFormRepository discussionFormRepository, IGroupChatRepository groupchatRepository)
     {
         _discussionFormRepository = discussionFormRepository;
@@ -27,6 +27,11 @@ public class DiscussionFormService
         CollaborativeSpace discussionForm = _discussionFormRepository.GetById(id);
         HydrateDiscussionForms(discussionForm);
         return discussionForm;
+    }
+    
+    public void CreateComment(User user, DiscussionFormCommentCreateRequest request)
+    {
+        _discussionFormRepository.CreateComment(user, request);
     }
     
     public void CreateDiscussionFrom(User user, DiscussionFormCreateRequest request)

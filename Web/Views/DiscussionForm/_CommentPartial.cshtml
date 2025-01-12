@@ -9,12 +9,14 @@
         @Model.Message
         <div class="mt-2 mb-3">
             <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput(@Model.Id)">Beantwoorden</button>
-            <div id="reply-input-@Model.Id" class="reply-input">
-                <textarea class="form-control" placeholder="Schrijf een reactie"></textarea>
-                <button class="btn btn-primary btn-sm mt-2" onclick="submitReply(@Model.Id)">Versturen</button>
+            <div id="reply-input-@(Model.Id)" class="reply-input w-100">
+                <form id="replyForm-@Model.Id" data-post-id="@Model.FormId" data-parent-id="@Model.Id">
+                    <textarea name="Text" class="form-control" id="replyText-@Model.Id" placeholder="Schrijf een reactie" required></textarea>
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Versturen</button>
+                </form>
             </div>
         </div>
-        
+
         @if (Model.Comments != null && Model.Comments.Any())
         {
         <div class="nested-comment">

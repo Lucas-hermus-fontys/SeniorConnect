@@ -32,8 +32,7 @@ public class DiscussionFormRepository : IDiscussionFormRepository
 
     public List<CollaborativeSpace> GetDiscussionForms()
     {
-        string query =
-            @"SELECT * FROM collaborative_space WHERE type = 'FORM' AND is_active = true ORDER BY created_at desc";
+        string query = @"SELECT * FROM collaborative_space WHERE type = 'FORM' AND is_active = true ORDER BY created_at desc";
         return _database.ExecuteQueryAndMap<CollaborativeSpace>(query);
     }
 
@@ -75,7 +74,7 @@ public class DiscussionFormRepository : IDiscussionFormRepository
         WHERE cs.id IN ( " + groupChatIds.GeneratePlaceholderList() + @")
         AND cs.type = 'FORM'
         AND cs.is_active = TRUE
-        AND csm.is_active = TRUE";
+        AND csm.is_active = TRUE ORDER BY id DESC";
 
         return _database.ExecuteQueryAndMap<CollaborativeSpaceMessage>(query, groupChatIds);
     }
@@ -148,6 +147,20 @@ public class DiscussionFormRepository : IDiscussionFormRepository
         return newId;
     }
 
+    public void CreateComment(User user, DiscussionFormCommentCreateRequest request)
+    {
+        const string query = @"INSERT INTO collaborative_space_message (user_id, parent_id, collaborative_space_id, message, is_active, created_at) VALUES (?, ?, ?, ?, ?, ?);";
+        
+        _database.ExecuteQuery(query,
+            user.Id,
+            request.ParentId != 0 ? request.ParentId : null,
+            request.DiscussionFormId,
+            request.Text,
+            true,
+            DateTime.Now
+        );
+    }
+    
     public void AssignTopicsToDiscussionForm(int discussionFormId, List<int> topicIds)
     {
         const string query = @"

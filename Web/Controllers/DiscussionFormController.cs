@@ -38,6 +38,25 @@ namespace Web.Controllers
             return View(DiscussionFormBuilder.CreateFromParts(user, _discussionFormService.GetDiscussionForms()));
         }
 
+        public IActionResult CreateComment(DiscussionFormCommentCreateRequest request)
+        {
+            string emailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+        
+            if (string.IsNullOrEmpty(emailClaim))
+            {
+                return Unauthorized();
+            }
+            
+            User user = _userService.GetByEmail(emailClaim);
+           
+            _discussionFormService.CreateComment(user, request);
+
+            CollaborativeSpace discussionForm =_discussionFormService.GetDiscussionFormById(request.DiscussionFormId);
+            
+            return PartialView("_PostPartial", DiscussionFormBuilder.CreateFormFromParts(discussionForm));
+            
+        }
+
         public IActionResult Welcome()
         {
             return View();

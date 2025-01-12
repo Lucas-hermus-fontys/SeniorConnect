@@ -7,4 +7,7 @@ public class CommentDTO
     public UserDTO User { get; set; }
     public String DisplayDate { get; set; }
     public List<CommentDTO> Comments { get; set; }
+
+    public int FormId { get; set; }
+    public int ParentId { get; set; }
 }
