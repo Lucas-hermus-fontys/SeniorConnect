@@ -24,7 +24,8 @@ public class DiscussionFormBuilder
             {
                 Id = space.Creator.Id,
                 DisplayName = space.Creator.FirstName + " " + space.Creator.LastName,
-                ProfileImageUrl = space.Creator.ProfilePictureUrl
+                ProfileImageUrl = space.Creator.ProfilePictureUrl,
+                Email = space.Creator.Email
             },
             Comments = BuildCommentsRecursive(space.CollaborativeSpaceMessages, space.Id),
             Tags = topics
@@ -54,7 +55,8 @@ public class DiscussionFormBuilder
                 {
                     Id = space.Creator.Id,
                     DisplayName = space.Creator.FirstName + " " + space.Creator.LastName,
-                    ProfileImageUrl = space.Creator.ProfilePictureUrl
+                    ProfileImageUrl = space.Creator.ProfilePictureUrl,
+                    Email = space.Creator.Email
                 },
                 Comments = BuildCommentsRecursive(space.CollaborativeSpaceMessages, space.Id),
                 Tags = topics
@@ -69,7 +71,8 @@ public class DiscussionFormBuilder
             {
                 Id = user.Id,
                 DisplayName = user.FirstName + " " + user.LastName,
-                ProfileImageUrl = user.ProfilePictureUrl
+                ProfileImageUrl = user.ProfilePictureUrl,
+                Email = user.Email
             },
             Forms = forms
         };
@@ -93,7 +96,8 @@ public class DiscussionFormBuilder
                 {
                     Id = message.User.Id,
                     DisplayName = message.User.FirstName + " " + message.User.LastName,
-                    ProfileImageUrl = message.User.ProfilePictureUrl
+                    ProfileImageUrl = message.User.ProfilePictureUrl,
+                    Email = message.User.Email
                 },
                 Comments = BuildCommentsRecursive(message.ChildMessages, formId),
                 FormId = formId,

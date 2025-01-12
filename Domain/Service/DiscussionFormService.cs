@@ -29,7 +29,7 @@ public class DiscussionFormService
         return discussionForm;
     }
     
-    public void CreateComment(User user, DiscussionFormCommentCreateRequest request)
+    public void CreateComment(User user, DiscussionFormEditRequest request)
     {
         _discussionFormRepository.CreateComment(user, request);
     }
@@ -45,6 +45,11 @@ public class DiscussionFormService
         {
             AddTopicsToDiscussionForm(discussionForm, relatedTopics);
         }
+    }
+
+    public void EditDiscussionForm(DiscussionFormUpdateRequest request)
+    {
+        _discussionFormRepository.UpdateDiscussionForm(request);
     }
 
     public void AddTopicsToDiscussionForm(CollaborativeSpace discussionForm, List<Topic> topics)

@@ -147,7 +147,18 @@ public class DiscussionFormRepository : IDiscussionFormRepository
         return newId;
     }
 
-    public void CreateComment(User user, DiscussionFormCommentCreateRequest request)
+    public void UpdateDiscussionForm(DiscussionFormUpdateRequest request)
+    {
+        const string query = @"
+        UPDATE collaborative_space 
+        SET name = ?, type = ?, is_direct_message = ?, is_active = ?, description = ?, updated_at = ? 
+        WHERE id = ?;";
+        
+        _database.ExecuteQuery(query, request.Title, CollaborativeSpaceType.FORM.ToString(), false, true,
+            request.Description, DateTime.Now, request.Id);
+    }
+
+    public void CreateComment(User user, DiscussionFormEditRequest request)
     {
         const string query = @"INSERT INTO collaborative_space_message (user_id, parent_id, collaborative_space_id, message, is_active, created_at) VALUES (?, ?, ?, ?, ?, ?);";
         

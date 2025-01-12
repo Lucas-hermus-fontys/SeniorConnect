@@ -38,7 +38,7 @@ namespace Web.Controllers
             return View(DiscussionFormBuilder.CreateFromParts(user, _discussionFormService.GetDiscussionForms()));
         }
 
-        public IActionResult CreateComment(DiscussionFormCommentCreateRequest request)
+        public IActionResult CreateComment(DiscussionFormEditRequest request)
         {
             string emailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
         
@@ -78,6 +78,33 @@ namespace Web.Controllers
                 try
                 {
                     _discussionFormService.CreateDiscussionFrom(user, request);
+                    TempData["SuccessMessage"] = "We hebben uw Formulier toegevoegd aan onze collectie.";
+                }
+                catch (EmailAlreadyExistsException e)
+                {
+                    ModelState.AddModelError("email", e.Message);
+                }
+            }
+        
+            return PartialView("_DiscussionFormPartial",
+                DiscussionFormBuilder.CreateFromParts(user, _discussionFormService.GetDiscussionForms()));
+        }
+        
+        public IActionResult Edit(DiscussionFormUpdateRequest request)
+        {
+            string emailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(emailClaim))
+            {
+                return Unauthorized();
+            }
+        
+            User user = _userService.GetByEmail(emailClaim);
+        
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _discussionFormService.EditDiscussionForm(request);
                     TempData["SuccessMessage"] = "We hebben uw Formulier toegevoegd aan onze collectie.";
                 }
                 catch (EmailAlreadyExistsException e)

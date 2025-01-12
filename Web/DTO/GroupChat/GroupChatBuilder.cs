@@ -13,7 +13,8 @@ namespace Web.DTO.GroupChat
             {
                 Id = user.Id,
                 DisplayName = user.FirstName + " " + user.LastName,
-                ProfileImageUrl = user.ProfilePictureUrl
+                ProfileImageUrl = user.ProfilePictureUrl,
+                Email = user.Email
             };
 
             if (collaborativeSpaces.Count == 0)
@@ -34,7 +35,8 @@ namespace Web.DTO.GroupChat
                 {
                     Id = spaceMessage.User.Id,
                     DisplayName = spaceMessage.User.FirstName + " " + spaceMessage.User.LastName,
-                    ProfileImageUrl = spaceMessage.User.ProfilePictureUrl
+                    ProfileImageUrl = spaceMessage.User.ProfilePictureUrl,
+                    Email = spaceMessage.User.Email
                 };
                 message.Time = spaceMessage.CreatedAt.ToString("HH:mm");
                 messages.Add(message);
@@ -77,7 +79,8 @@ namespace Web.DTO.GroupChat
             {
                 Id = user.Id,
                 DisplayName = user.FirstName + " " + user.LastName,
-                ProfileImageUrl = user.ProfilePictureUrl
+                ProfileImageUrl = user.ProfilePictureUrl,
+                Email = user.Email
             };
             
             foreach (var spaceMessage in groupChat.CollaborativeSpaceMessages)
@@ -88,7 +91,8 @@ namespace Web.DTO.GroupChat
                 {
                     Id = spaceMessage.User.Id,
                     DisplayName = spaceMessage.User.FirstName + " " + spaceMessage.User.LastName,
-                    ProfileImageUrl = spaceMessage.User.ProfilePictureUrl
+                    ProfileImageUrl = spaceMessage.User.ProfilePictureUrl,
+                    Email = spaceMessage.User.Email
                 };
                 message.Time = spaceMessage.CreatedAt.ToString("HH:mm");
                 messages.Add(message);

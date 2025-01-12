@@ -16,5 +16,6 @@ public interface IDiscussionFormRepository
     public List<CollaborativeSpaceMessage> GetCommentsByDiscussionFormIds(List<int> discussionFormIds);
     public List<Topic> GetTopicsByCollaborativeSpaceIds(List<int> collaborativeSpaceIds);
     public void AssignTopicsToDiscussionForm(int discussionFormId, List<int> topicIds);
-    public void CreateComment(User user, DiscussionFormCommentCreateRequest request);
+    public void CreateComment(User user, DiscussionFormEditRequest request);
+    public void UpdateDiscussionForm(DiscussionFormUpdateRequest request);
 }

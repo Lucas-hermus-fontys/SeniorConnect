@@ -6,4 +6,6 @@ public class UserDTO
     public string DisplayName { get; set; }
     
     public string ProfileImageUrl { get; set; }
+    
+    public string Email { get; set; }
 }

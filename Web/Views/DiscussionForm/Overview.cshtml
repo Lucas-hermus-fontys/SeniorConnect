@@ -215,5 +215,52 @@
         });
     });
 </script>
+
+<script>
+    $(document).ready(function () {
+        $(document).on("click", ".btn-outline-primary", function () {
+            var postId = $(this).closest('.post-card').attr('id').split('-')[1];  // Get the post ID
+            toggleEditForm(postId);
+        });
+
+        $(document).on("submit", "form[id^='edit-post-form-']", function (event) {
+            event.preventDefault();  
+
+            var form = $(this);
+            var postId = form.data('post-id');
+            var updatedTitle = $("#edit-title-" + postId).val();
+            var updatedDescription = $("#edit-description-" + postId).val();
+
+            $.ajax({
+                url: "/DiscussionForm/Edit",  // Your controller action URL
+                type: "POST",
+                data: {
+                    id: postId,
+                    title: updatedTitle,
+                    description: updatedDescription
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function () {
+                }
+            });
+        });
+
+        $(document).on("click", ".btn-outline-secondary", function () {
+            var postId = $(this).closest('form').data('post-id');
+            toggleEditForm(postId);  // Hide the edit form without submitting changes
+        });
+
+        // Function to toggle the visibility of the edit form
+        function toggleEditForm(postId) {
+            // Toggle the visibility of the edit form and the display content
+            $("#post-edit-form-" + postId).toggleClass("d-none");
+            $("#post-title-display-" + postId).toggleClass("d-none");
+            $("#post-description-display-" + postId).toggleClass("d-none");
+        }
+    });
+</script>
+
 </body>
 </html>

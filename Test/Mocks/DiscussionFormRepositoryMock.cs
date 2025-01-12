@@ -77,7 +77,11 @@ public class DiscussionFormRepositoryMock : IDiscussionFormRepository
     {
     }
 
-    public void CreateComment(User user, DiscussionFormCommentCreateRequest request)
+    public void UpdateDiscussionForm(DiscussionFormUpdateRequest request)
+    {
+    }
+
+    public void CreateComment(User user, DiscussionFormEditRequest request)
     {
         
     }

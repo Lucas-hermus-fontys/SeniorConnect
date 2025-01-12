@@ -1,29 +1,50 @@
+@using System.Security.Claims
 @using Web.DTO.DiscussionForm
 @model Web.DTO.DiscussionForm.FormDTO
 
-<div class="card post-card">
+<div class="card post-card" id="post-@Model.Id">
     <div class="card-body">
-        <div class="post-header d-flex align-items-center">
-            <img src="@(Model.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="" class="mr-2">
-            <div>
-                <strong>@Model.User.DisplayName</strong>
-                <small class="text-muted">@Model.DisplayDate</small>
-            </div>
-        </div>
-        <div class="post-body">
+        <div class="post-header d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
+                <img src="@(Model.User.ProfileImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")" alt="" class="mr-2">
+                <div>
+                    <strong>@Model.User.DisplayName</strong>
+                    <small class="text-muted">@Model.DisplayDate</small>
+                </div>
+            </div>
+
+            @if (User.FindFirst(ClaimTypes.Email)?.Value == Model.User.Email)
+            {
+            <div class="post-actions ml-auto">
+                <button class="btn btn-outline-primary btn-sm" >Bewerken</button>
+            </div>
+            }
+        </div>
+
+        <div class="post-body">
+            <!-- Display Content (Initially Visible) -->
+            <div id="post-title-display-@Model.Id" class="align-items-center">
                 <h5 class="mb-0">@Model.Title</h5>
-                <!-- Custom Tinted Badges Next to the Title -->
                 <div class="ml-2">
                     @foreach (String tag in Model.Tags)
                     {
-                        <span class="badge badge-primary">@tag</span>
+                    <span class="badge badge-primary">@tag</span>
                     }
                 </div>
             </div>
-            <p>@Model.Description</p>
-        </div>
 
+            <p id="post-description-display-@Model.Id">@Model.Description</p>
+
+            <!-- Editable Form (Initially Hidden) -->
+            <div id="post-edit-form-@Model.Id" class="d-none">
+                <form id="edit-post-form-@Model.Id" data-post-id="@Model.Id">
+                    <textarea id="edit-title-@Model.Id" class="form-control mb-2" required>@Model.Title</textarea>
+                    <textarea id="edit-description-@Model.Id" class="form-control mb-2" required>@Model.Description</textarea>
+                    <button type="submit" class="btn btn-primary btn-sm">Opslaan</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="cancelEdit(@Model.Id)">Annuleren</button>
+                </form>
+            </div>
+        </div>
 
         <div class="post-footer">
             <button class="btn btn-outline-secondary btn-sm" onclick="toggleReplyInput('form' + '@Model.Id')">Beantwoorden</button>
@@ -36,25 +57,27 @@
         </div>
 
         <div class="comment-section">
-
             @if (Model.Comments.Any())
             {
-                <partial name="_CommentPartial" model="Model.Comments.First()"/>
+            <partial name="_CommentPartial" model="Model.Comments.First()"/>
             }
 
             <!-- Collapsible Comments -->
-
             <div id="comment-collapse-@Model.Id" class="collapse">
-
                 @foreach (CommentDTO comment in Model.Comments.Skip(1))
                 {
-                    <partial name="_CommentPartial" model="comment"/>
+                <partial name="_CommentPartial" model="comment"/>
                 }
             </div>
+
             @if (Model.Comments.Count > 1)
             {
-                <div class="collapse-btn" data-toggle="collapse" href="#comment-collapse-@Model.Id">Meer reacties weergeven</div>
+            <div class="collapse-btn" data-toggle="collapse" href="#comment-collapse-@Model.Id">Meer reacties weergeven</div>
             }
         </div>
     </div>
 </div>
+
+
+
+
