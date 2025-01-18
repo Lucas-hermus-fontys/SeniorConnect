@@ -1,6 +1,7 @@
 using Domain.Analysis;
 using Domain.Interface;
 using Domain.Model;
+using Domain.Validation;
 using Microsoft.VisualBasic.CompilerServices;
 using Web.Models;
 
@@ -9,10 +10,14 @@ namespace Domain.Service;
 public class DiscussionFormService
 {
     private readonly IDiscussionFormRepository _discussionFormRepository;
+    private readonly IDiscussionFormValidator _discussionFormValidator;
+    private readonly ITopicAnalysisStrategy _topicAnalysisStrategy;
     
-    public DiscussionFormService(IDiscussionFormRepository discussionFormRepository, IGroupChatRepository groupchatRepository)
+    public DiscussionFormService(IDiscussionFormRepository discussionFormRepository, IDiscussionFormValidator discussionFormValidator, ITopicAnalysisStrategy topicAnalysisStrategy)
     {
         _discussionFormRepository = discussionFormRepository;
+        _discussionFormValidator = discussionFormValidator;
+        _topicAnalysisStrategy = topicAnalysisStrategy;
     }
 
     public List<CollaborativeSpace> GetDiscussionForms()
@@ -39,7 +44,7 @@ public class DiscussionFormService
         int newDiscussionFormId = _discussionFormRepository.CreateDiscussionForm(user, request);
         CollaborativeSpace discussionForm = GetDiscussionFormById(newDiscussionFormId);
         List<Topic> topics = GetTopics();
-        DiscussionFormAnalyzer analyzer = new DiscussionFormAnalyzer(discussionForm, topics);
+        DiscussionFormAnalyzer analyzer = new DiscussionFormAnalyzer(discussionForm, topics, _discussionFormValidator, _topicAnalysisStrategy);
         List<Topic> relatedTopics = analyzer.GetTopicsFromContext();
         if (relatedTopics.Any())
         {

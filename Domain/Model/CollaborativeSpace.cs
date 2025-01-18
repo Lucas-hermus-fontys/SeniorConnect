@@ -17,4 +17,20 @@ public class CollaborativeSpace
     public List<User> CollaborativeSpaceUsers { get; set; } = new List<User>();
     public User Creator { get; set; }
     public List<Topic> Topics { get; set; } = new List<Topic>();
+    
+    public void AddCollaborativeSpaceUser(User user)
+    {
+        if (user != null && !CollaborativeSpaceUsers.Contains(user))
+        {
+            CollaborativeSpaceUsers.Add(user);
+        }
+    }
+    
+    public void AddCollaborativeSpaceMessage(CollaborativeSpaceMessage message)
+    {
+        if (message != null && !CollaborativeSpaceMessages.Contains(message))
+        {
+            CollaborativeSpaceMessages.Add(message);
+        }
+    }
 }

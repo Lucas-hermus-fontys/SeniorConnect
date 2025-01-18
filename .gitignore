@@ -16,3 +16,4 @@ appsettings.Development.json
 /Web/obj
 /Test/bin
 /Test/obj
+/Web/publish

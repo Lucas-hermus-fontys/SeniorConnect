@@ -1,6 +1,6 @@
 BEGIN;
 SET
-FOREIGN_KEY_CHECKS = 0;
+    FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS user_interest;
 DROP TABLE IF EXISTS collaborative_space_message;
 DROP TABLE IF EXISTS collaborative_space_user;
@@ -105,7 +105,7 @@ CREATE TABLE volenteer_work
 
 CREATE TABLE volenteer_work_user
 (
-    id                INTEGER,
+    id                INTEGER AUTO_INCREMENT,
     user_id           INTEGER,
     volenteer_work_id INTEGER,
     is_creator        BOOLEAN,

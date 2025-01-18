@@ -9,6 +9,7 @@ using Domain.Interface;
 using Domain.Model;
 using Domain.Service;
 using Domain.Transformer;
+using Domain.Validation;
 
 namespace Infrastructure.Database.Util;
 
@@ -316,7 +317,7 @@ public class Factory : IFactory
 
         CollaborativeSpace discussionForm = _discussionFormService.GetDiscussionFormById(newId);
         List<Topic> topics = _discussionFormService.GetTopics();
-        DiscussionFormAnalyzer analyzer = new DiscussionFormAnalyzer(discussionForm, topics);
+        DiscussionFormAnalyzer analyzer = new DiscussionFormAnalyzer(discussionForm, topics, new DiscussionFormValidator(), new KeywordMatchingStrategy());
         List<Topic> relatedTopics = analyzer.GetTopicsFromContext();
         if (relatedTopics.Any())
         {

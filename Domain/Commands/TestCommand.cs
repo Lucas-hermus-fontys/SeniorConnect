@@ -3,6 +3,7 @@ using Domain.Enum;
 using Domain.Interface;
 using Domain.Model;
 using Domain.Service;
+using Domain.Validation;
 
 namespace Domain.Commands;
 
@@ -34,9 +35,8 @@ public class TestCommand
         List<TopicKeyword> keywords = _discussionFormRepository.GetKeywords();
         topics.ForEach(topic => { if (topic.Keywords == null) topic.Keywords = new List<TopicKeyword>(); topic.Keywords.AddRange(keywords.Where(keyword => keyword.TopicId == topic.Id)); });
         
-        DiscussionFormAnalyzer test = new DiscussionFormAnalyzer(space, topics);
+        DiscussionFormAnalyzer test = new DiscussionFormAnalyzer(space, topics, new DiscussionFormValidator(), new KeywordMatchingStrategy());
         
- 
         List<Topic> actualTopics = test.GetTopicsFromContext();
 
     }

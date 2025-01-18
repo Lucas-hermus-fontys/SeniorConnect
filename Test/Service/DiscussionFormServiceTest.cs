@@ -1,7 +1,8 @@
 using Domain.Model;
 using Domain.Service;
 using Web.Models;
-using System.Linq;
+using Domain.Analysis;
+using Domain.Validation;
 using FluentAssertions;
 using Test.Mocks;
 
@@ -15,7 +16,7 @@ public class DiscussionFormServiceTest
     public DiscussionFormServiceTest()
     {
         _discussionFormMock = new DiscussionFormRepositoryMock();
-        _discussionFormService = new DiscussionFormService(_discussionFormMock, null);
+        _discussionFormService = new DiscussionFormService(_discussionFormMock, new DiscussionFormValidator(), new KeywordMatchingStrategy());
     }
 
     [Fact]

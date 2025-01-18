@@ -188,11 +188,12 @@
     $(document).ready(function () {
         $(document).on("submit", "form[id^='replyForm']", function (event) {
             event.preventDefault();
+            
 
             var form = $(this);
             var postId = form.data('post-id');
             var parentId = form.data('parent-id') ?? null;
-            var replyText = $("#replyText-" + parentId ?? postId).val();
+            var replyText = $("#replyText-" + (parentId != null ? parentId : postId)).val();
 
             $.ajax({
                 url: "/DiscussionForm/CreateComment",
