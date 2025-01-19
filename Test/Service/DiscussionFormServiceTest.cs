@@ -1,10 +1,12 @@
+using Domain.Analysis;
+using Domain.Enum;
 using Domain.Model;
 using Domain.Service;
-using Web.Models;
-using Domain.Analysis;
-using Domain.Validation;
 using FluentAssertions;
 using Test.Mocks;
+using Test.Stubs;
+using Test.Util;
+using Web.Models;
 
 namespace Test.Service;
 
@@ -16,7 +18,7 @@ public class DiscussionFormServiceTest
     public DiscussionFormServiceTest()
     {
         _discussionFormMock = new DiscussionFormRepositoryMock();
-        _discussionFormService = new DiscussionFormService(_discussionFormMock, new DiscussionFormValidator(), new KeywordMatchingStrategy());
+        _discussionFormService = new DiscussionFormService(_discussionFormMock, new TestDiscussionFormValidator(), new KeywordMatchingStrategy());
     }
 
     [Fact]
@@ -29,5 +31,22 @@ public class DiscussionFormServiceTest
         
         _discussionFormMock.AssignTopicsCalled.Should().BeTrue("The topics should have been assigned to the discussion form.");
     }
+    
+    [Fact]
+    public void GetDiscussionFormById_Should_Return_Correct_DiscussionForm()
+    {
+        int discussionFormId = 1;  
+        var expectedDiscussionForm = new CollaborativeSpace
+        {
+            Type = CollaborativeSpaceType.CHAT
+        };  
+        var discussionFormRepositoryMock = new DiscussionFormRepositoryMock();
+        var discussionFormService = new DiscussionFormService(discussionFormRepositoryMock, new TestDiscussionFormValidator(), new KeywordMatchingStrategy());
+
+        var result = discussionFormService.GetDiscussionFormById(discussionFormId);
+
+        result.Should().BeEquivalentTo(expectedDiscussionForm, options => options.ExcludingMissingMembers());
+    }
+    
 }
 

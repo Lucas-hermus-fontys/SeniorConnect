@@ -2,8 +2,8 @@ using Domain.Analysis;
 using Domain.Enum;
 using Domain.Exception;
 using Domain.Model;
-using Domain.Validation;
 using FluentAssertions;
+using Test.Stubs;
 using Test.Util;
 
 namespace Test.Analysis;
@@ -13,19 +13,33 @@ public class DiscussionFormAnalyzerTest
     [Fact]
     public void AnalyzerWithValidInputShouldReturnCorrectResult()
     {
-        DiscussionFormAnalyzer analyzer = new DiscussionFormAnalyzer(MockMaker.GetBaseDiscussionForm(), MockMaker.GetTopics(), new DiscussionFormValidator(), new KeywordMatchingStrategy());
+        // Arrange
+        DiscussionFormAnalyzer analyzer = new DiscussionFormAnalyzer(
+            MockMaker.GetBaseDiscussionForm(),
+            MockMaker.GetTopics(), new TestDiscussionFormValidator(),
+            new TestKeywordMatchingStrategy()
+        );
         Topic expectedResult = MockMaker.GetTopics()[2];
 
+        // Act
         List<Topic> result = analyzer.GetTopicsFromContext();
 
+        //Assert
         result.First().Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
     public void InvalidDiscussionFormShouldThrow()
     {
-        Action act = () => new DiscussionFormAnalyzer(null, MockMaker.GetTopics(), new DiscussionFormValidator(), new KeywordMatchingStrategy());
+        // Arrange
+        Action act = () => new DiscussionFormAnalyzer(
+            null,
+            MockMaker.GetTopics(),
+            new TestDiscussionFormValidator(),
+            new TestKeywordMatchingStrategy()
+        );
 
+        //Act and assert
         act.Should().Throw<InvalidDiscussionFormException>();
     }
 
@@ -33,8 +47,9 @@ public class DiscussionFormAnalyzerTest
     public void InvalidCollaborativeSpaceTypeShouldThrow()
     {
         CollaborativeSpace invalidSpace = MockMaker.GetBaseDiscussionForm();
-        invalidSpace.Type = CollaborativeSpaceType.CHAT; 
-        Action act = () => new DiscussionFormAnalyzer(invalidSpace, MockMaker.GetTopics(), new DiscussionFormValidator(), new KeywordMatchingStrategy());
+        invalidSpace.Type = CollaborativeSpaceType.CHAT;
+        Action act = () => new DiscussionFormAnalyzer(invalidSpace, MockMaker.GetTopics(),
+            new TestDiscussionFormValidator(), new TestKeywordMatchingStrategy());
 
         act.Should().Throw<InvalidDiscussionFormException>();
     }
@@ -42,7 +57,8 @@ public class DiscussionFormAnalyzerTest
     [Fact]
     public void EmptyTopicListShouldThrow()
     {
-        Action act = () => new DiscussionFormAnalyzer(MockMaker.GetBaseDiscussionForm(), new List<Topic>(), new DiscussionFormValidator(), new KeywordMatchingStrategy());
+        Action act = () => new DiscussionFormAnalyzer(MockMaker.GetBaseDiscussionForm(), new List<Topic>(),
+            new TestDiscussionFormValidator(), new TestKeywordMatchingStrategy());
 
         act.Should().Throw<InvalidTopicException>();
     }
@@ -50,8 +66,10 @@ public class DiscussionFormAnalyzerTest
     [Fact]
     public void TopicWithoutKeywordsShouldThrow()
     {
-        List<Topic> topicsWithoutKeywords = new List<Topic> { new Topic { Id = 1, Keywords = new List<TopicKeyword>() } };
-        Action act = () => new DiscussionFormAnalyzer(MockMaker.GetBaseDiscussionForm(), topicsWithoutKeywords, new DiscussionFormValidator(), new KeywordMatchingStrategy());
+        List<Topic> topicsWithoutKeywords = new List<Topic>
+            { new Topic { Id = 1, Keywords = new List<TopicKeyword>() } };
+        Action act = () => new DiscussionFormAnalyzer(MockMaker.GetBaseDiscussionForm(), topicsWithoutKeywords,
+            new TestDiscussionFormValidator(), new TestKeywordMatchingStrategy());
 
         act.Should().Throw<InvalidTopicException>();
     }
@@ -71,7 +89,8 @@ public class DiscussionFormAnalyzerTest
             }
         };
 
-        Action act = () => new DiscussionFormAnalyzer(MockMaker.GetBaseDiscussionForm(), topicsWithInvalidKeyword, new DiscussionFormValidator(), new KeywordMatchingStrategy());
+        Action act = () => new DiscussionFormAnalyzer(MockMaker.GetBaseDiscussionForm(), topicsWithInvalidKeyword,
+            new TestDiscussionFormValidator(), new TestKeywordMatchingStrategy());
 
         act.Should().Throw<InvalidTopicException>();
     }
@@ -91,7 +110,8 @@ public class DiscussionFormAnalyzerTest
             }
         };
 
-        Action act = () => new DiscussionFormAnalyzer(MockMaker.GetBaseDiscussionForm(), topicsWithInvalidKeywordWeight, new DiscussionFormValidator(), new KeywordMatchingStrategy());
+        Action act = () => new DiscussionFormAnalyzer(MockMaker.GetBaseDiscussionForm(), topicsWithInvalidKeywordWeight,
+            new TestDiscussionFormValidator(), new TestKeywordMatchingStrategy());
 
         act.Should().Throw<InvalidTopicException>();
     }
@@ -102,7 +122,8 @@ public class DiscussionFormAnalyzerTest
         List<Topic> topics = MockMaker.GetTopics();
         CollaborativeSpace form = MockMaker.GetBaseDiscussionForm();
         form.Description = "No relevant keywords here.";
-        DiscussionFormAnalyzer analyzer = new DiscussionFormAnalyzer(form, topics, new DiscussionFormValidator(), new KeywordMatchingStrategy());
+        DiscussionFormAnalyzer analyzer = new DiscussionFormAnalyzer(form, topics, new TestDiscussionFormValidator(),
+            new TestKeywordMatchingStrategy());
 
         List<Topic> result = analyzer.GetTopicsFromContext();
 

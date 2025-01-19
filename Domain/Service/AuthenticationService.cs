@@ -18,15 +18,16 @@ public class AuthenticationService
     {
         if (_userRepository.GetByEmail(email) != null) { throw new EmailAlreadyExistsException(); }
 
-        String salt = TokenProviderUtil.GenerateSalt();
+        string salt = TokenProviderUtil.GenerateSalt();
         _userRepository.CreateNewUser(new User
         {
-            UserRole = new UserRole { Id = 1, Name = "Admin" },
+            UserRole = new UserRole(1, "Admin"),
             Email = email,
             Salt = salt,
             Password = TokenProviderUtil.GetSha256Hash(password + salt)
         });
     }
+
 
     public bool LoginCredentialsAreValid(String email, String password)
     {

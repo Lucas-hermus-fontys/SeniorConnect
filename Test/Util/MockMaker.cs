@@ -61,7 +61,7 @@ namespace Test.Util
             return new User
             {
                 Id = 1,
-                UserRole = new UserRole { Id = 1, Name = "Admin" },
+                UserRole = new UserRole (1,"Admin" ),
                 Email = "johndoe@example.com",
                 Password = "password123",
                 Salt = "salt",

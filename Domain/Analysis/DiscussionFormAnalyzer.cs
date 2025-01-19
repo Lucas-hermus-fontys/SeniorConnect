@@ -17,11 +17,12 @@ public class DiscussionFormAnalyzer
     private readonly ITopicAnalysisStrategy _analysisStrategy;
 
     public DiscussionFormAnalyzer(
-        CollaborativeSpace collaborativeSpace, 
-        List<Topic> topics, 
-        IDiscussionFormValidator discussionFormValidator, 
+        CollaborativeSpace collaborativeSpace,
+        List<Topic> topics,
+        IDiscussionFormValidator discussionFormValidator,
         ITopicAnalysisStrategy analysisStrategy,
-        Double threshold = 1.0)
+        Double threshold = 1.0 
+    )
     {
         _discussionForm = collaborativeSpace;
         _topics = topics;
@@ -35,7 +36,7 @@ public class DiscussionFormAnalyzer
     public List<Topic> GetTopicsFromContext()
     {
         var scores = _analysisStrategy.Analyze(_discussionForm, _topics);
-        
+
         var relevantTopics = scores.Where(s => s.Value >= _threshold)
             .OrderByDescending(s => s.Value)
             .Select(s => s.Key)

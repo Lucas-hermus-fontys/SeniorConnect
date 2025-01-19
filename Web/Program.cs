@@ -1,7 +1,9 @@
+using Domain.Analysis;
 using Domain.Commands;
 using Domain.Interface;
 using Domain.Service;
 using Domain.Util;
+using Domain.Validation;
 using Infrastructure.Database.Util;
 using Infrastructure.Database.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -44,6 +46,8 @@ builder.Services.AddScoped<GroupChatService>();
 builder.Services.AddScoped<IDiscussionFormRepository, DiscussionFormRepository>();
 builder.Services.AddScoped<DiscussionFormRepository>();
 builder.Services.AddScoped<DiscussionFormService>();
+builder.Services.AddScoped<IDiscussionFormValidator, DiscussionFormValidator>();
+builder.Services.AddScoped<ITopicAnalysisStrategy, KeywordMatchingStrategy>();
 
 var app = builder.Build();
 
